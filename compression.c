@@ -1,5 +1,5 @@
 /* 
-compression algorithm based on hufferman coding to compress text files
+compression algorithm based on huffman coding to compress text files
 Steps:
 1.Calculate the frequency of each character in the text file
 2.Sort the characters in increasing order of the frequency.These are stored in a priority queue.
