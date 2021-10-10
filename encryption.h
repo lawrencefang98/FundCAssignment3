@@ -1,29 +1,11 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                       PRE-PROCESSING DIRECTIVES
+ *                       PREPROCESSOR DIRECTIVES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #define MAX_FILE_NAME 30
 #define MAX_PASS_SIZE 20
 #define MAX_NAME_LENGTH 20
-
-/* Variables - delete later */
-int i;
-int j;
-int n;
-
-char in_filename[];
-char out_filename[];
-char plaintext[];
-int ciphertext[];
-char decrypt[];
-
-int key[];
-
-char firstName[];
-char lastName[];
-char username[];
-char password[];
-
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
