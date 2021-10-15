@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 /**
  * Author: Lawrence Fang
  * Header file for data manipulation
@@ -62,6 +61,19 @@ typedef struct Doctor Doctor_t;
 
 /**
  * Author: Lawrence Fang
+ * Medical record information represented in linked list structure
+ * Linked list structure chosen due to unknown size of medical records for each user
+**/
+struct MedicalRecord {
+    Date_t dateOfEntry;
+    Doctor_t doctorVisited;
+    char description[MAX_RECORD_DESCRIPTION_LENGTH];
+    struct MedicalRecord* next;
+};
+typedef struct MedicalRecord MedicalRecord_t;
+
+/**
+ * Author: Lawrence Fang
  * Stores information related to a patient's medical information
 **/
 struct PatientInfo {
@@ -73,18 +85,7 @@ struct PatientInfo {
 };
 typedef struct PatientInfo PatientInfo_t;
 
-/**
- * Author: Lawrence Fang
- * Medical record information represented in linked list structure
- * Linked list structure chosen due to unknown size of medical records for each user
-**/
-struct MedicalRecord {
-    Date_t dateOfEntry;
-    Doctor_t doctorVisited;
-    char description[MAX_RECORD_DESCRIPTION_LENGTH];
-    MedicalRecord_t* next = NULL;
-};
-typedef struct MedicalRecord MedicalRecord_t;
+
 
 
 
@@ -108,19 +109,21 @@ struct Clinic {
     PatientInfo_t patientList[MAX_PATIENTS];
     Doctor_t doctorList[MAX_DOCTORS];
     AdminStaff_t adminStaffList[MAX_ADMIN_STAFF];
-    int userListCount = 0;
-    int patientListCount = 0;
-    int doctorListCount = 0;
-    int adminStaffCount = 0;
+    int patientListCount;
+    int doctorListCount;
+    int adminStaffCount;
+    int userListCount;
 };
 typedef struct Clinic Clinic_t;
+/*Constructor for Clinic*/
+void createClinic(Clinic_t clinic);
 
 /* FUNCTION DEFINITIONS */
 
 /*User Related Functions*/
-User_t createUser(Clinic_t clinic);
-void deleteUser(Clinic_t clinic, User_t userToDelete);
-User_t searchUser(Clinic_t clinic;
+void createUser(Clinic_t clinic);
+void deletelastUser(Clinic_t clinic, User_t userToDelete);
+User_t searchUser(Clinic_t clinic);
 void editUser(Clinic_t clinic, User_t userToEdit, int editOption);
 
 
@@ -128,7 +131,7 @@ void editUser(Clinic_t clinic, User_t userToEdit, int editOption);
 PatientInfo_t createPatientInfo(Clinic_t clinic, User_t user);
 void assignDoctor(Clinic_t clinic, PatientInfo_t patient, Doctor_t doctor);
 void deletePatientInfo(Clinic_t clinic, PatientInfo_t patientToDelete);
-Patient_Info_t searchPatientInfo(Clinic_t clinic, User_t userToSearch);
+PatientInfo_t searchPatientInfo(Clinic_t clinic, User_t userToSearch);
 void editPatientInfo(Clinic_t clinic, PatientInfo_t patientInfoToEdit);
 
 
@@ -141,7 +144,7 @@ void searchMedicalRecord(int searchOption);
 Doctor_t createDoctor(User_t user);
 void deleteDoctor(Doctor_t doctorToDelete);
 void editDoctor(Doctor_t doctorToEdit, int editOption);
-void setDoctorDates(Doctor_t doctorToEdit, int editOption)
+void setDoctorDates(Doctor_t doctorToEdit, int editOption);
 AdminStaff_t createAdminStaff(User_t user);
 void deleteAdminStaff(AdminStaff_t adminStaffToDelete);
 void editAdminStaffTitle(AdminStaff_t adminStaffToEdit);
@@ -150,6 +153,7 @@ void editAdminStaffTitle(AdminStaff_t adminStaffToEdit);
 Date_t getDate();
 
 /*Print Functions*/
+void printDate(Date_t date);
 void userToString(User_t userToDisplay);
 void patientInfoToString(PatientInfo_t patientInfoToDisplay);
 void medicalRecordToString(MedicalRecord_t medicalRecordToDisplay);
