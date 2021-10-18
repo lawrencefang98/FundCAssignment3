@@ -1,109 +1,76 @@
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                       PREPROCESSOR DIRECTIVES
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/******************************************************************************
+ *                          PREPROCESSOR DIRECTIVES                           *
+ ******************************************************************************/
 
 #define MAX_FILE_NAME 30
-#define MAX_PASS_SIZE 20
-#define MAX_NAME_LENGTH 20
+#define MAX_FILE_SIZE 1000
+#define LOGIN_DB "login_database.txt"
 
+#define MAX_PASS_LENGTH 20
+#define MIN_PASS_LENGTH 8
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                           FUNCTION PROTOTYPES
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define MAX_ID_LENGTH 10
+#define MAX_CLINIC_SIZE 50
 
-/******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: encryptMenu()          PURPOSE:  Prompts user for file encryption
- *
- * INPUT: File to be encrypted - plaintext
- * OUTPUT: Encrypted file - ciphertext
- *****************************************************************************/
+#define BUF_SIZE 4096
 
-void encryptMenu();
-
+/* Define boolean data type */
+typedef int bool;
+#define TRUE 1
+#define FALSE 0
 
 /******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: decryptMenu()          PURPOSE: User prompts for decryption
- *
- * INPUT: File to be decrypted - ciphertext
- * OUTPUT: Decrypted file - plaintext
- *****************************************************************************/
+ *                                 STRUCTURES                                 *
+ ******************************************************************************/
 
-void decryptMenu();
-
+typedef struct user {
+    int userID[MAX_ID_LENGTH + 1];
+    char password[MAX_PASS_LENGTH + 1];
+} user_t;
 
 /******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: encryptFile()              PURPOSE: Encrypt the plaintext file
- *
- * INPUT: plaintext file
- * OUTPUT: ciphertext file
- *****************************************************************************/
+ *                      FUNCTION PROTOTYPES  |  PASSWORD                      *
+ ******************************************************************************/
 
-void encryptFile(char plaintext[], int ciphertext[], int key[]);
+/* User Menu */
+_Noreturn void loginMenu();
+void printMenu();
 
+/* Menu Options */
+void loginUser(user_t accounts[], int* total_p);
+void addUser(user_t accounts[], int* total_p);
+void saveUser(user_t accounts[], int* total_p);
+void deleteUser(user_t accounts[], int* total_p);
 
-/******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: decryptFile()              PURPOSE: Decrypts the ciphertext file
- *
- * INPUT: ciphertext file
- * OUTPUT: plaintext file
- *****************************************************************************/
+/* Validity Check */
+bool checkChar(const char password[]);
+bool checkPass(int pass_buff[11], user_t accounts[], int* total_p);
+bool checkUser(int userID_buff[11], user_t accounts[], int* total_p);
 
-void decryptFile(int ciphertext[], char decrypt[], int key[]);
 
 
 /******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: manageUser()          PURPOSE: Username and password management
- *
- * INPUT:   firstName[], lastname[], username[], password[]
- *              - Registering users --> void registerUser();
- *              - Deleting user and pass --> void deleteUser():
- *              - Changing user and pass --> void changeUser();
- *****************************************************************************/
+ *                     FUNCTION PROTOTYPES  |  ENCRYPTION                     *
+ ******************************************************************************/
 
-void manageUser();
-void registerUser();
-void deleteUser();
-void changeUser();
+/* Menus */
+void securityMenu();
+void printSecurity();
+void encryptMenu(char input_b[BUF_SIZE], char output_b[BUF_SIZE],
+                 char key[MAX_PASS_LENGTH]);
+void decryptMenu(char input_b[BUF_SIZE], char output_b[BUF_SIZE],
+                 char key[MAX_PASS_LENGTH]);
 
 
-/******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: validPass()            PURPOSE: Validates username + pass
- *
- * INPUT: username and password
- * OUTPUT:  - valid = continue to encryption/decryption
- *          -  invalid = exit/ prompt for valid credentials
- *****************************************************************************/
+/* Menu Options */
+char readFile(char filename[], char input_b[BUF_SIZE]);
 
-void validPass();
-void checkAlpha(); /* passwords must include both char and int values */
-void checkNum();
+char encryptText(char plaintext_b[BUF_SIZE], char ciphertext_b[BUF_SIZE],
+                 char key[MAX_PASS_LENGTH]);
 
+char decryptText(char plaintext_b[BUF_SIZE], char ciphertext_b[BUF_SIZE],
+                 char key[MAX_PASS_LENGTH]);
 
-/******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: readData()         PURPOSE: Calculate file char length --> 'n'
- *
- * INPUT: text file
- * OUTPUT: char total
- *****************************************************************************/
-
-void readData(char plaintext[], int ciphertext[]);
-
-
-/******************************************************************************
- * AUTHOR: Mandana Ebrahimian
- * FUNCTION: keygen();          PURPOSE: Generate random key of 'n' length
- *
- * INPUT: text file char length
- * OUTPUT: cipher key
- *****************************************************************************/
-
-void keygen();
+void writeFile(char filename[], char input_b[BUF_SIZE], 
+               char output_b[BUF_SIZE]);
 
