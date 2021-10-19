@@ -1,14 +1,16 @@
 #include "dataManipulation.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 /**
  * createClinic
  * Constructor clinic and sets default values to counters
- * #return clinic: clinic to be constructed.
+ *
 **/
 void createClinic(Clinic_t clinic) {
+
     clinic.userListCount = 0;
     clinic.adminStaffCount = 0;
     clinic.doctorListCount = 0;
@@ -47,20 +49,20 @@ void createUser(Clinic_t clinic) {
     scanf("%50s", emailInput);
     strcpy(newUser.email, emailInput);
 
+    char addressInput[MAX_ADDRESS_LENGTH];
+    printf("Please enter user's address:");
+    scanf("%255s", addressInput);
+    strcpy(newUser.address, addressInput);
 
-    
-
-    /*Need to create digit checker function */
-    int phoneNoInput;
-    printf("Please enter user's number:");
-    scanf("%i", &phoneNoInput);
-    newUser.phoneNo = phoneNoInput;
+    newUser.phoneNo = getPhoneNo();
 
     printf("Please enter user's gender (M/F):");
     scanf(" %c", &newUser.gender);
 
-    /*Need to create userID generating function*/
-    newUser.userID = 1;
+    newUser.userID = 1000+clinic.userListCount;
+    clinic.userListCount++;
+    
+    printf("New user creation information");
     userToString(newUser);
 }
 
@@ -135,4 +137,31 @@ void printDate(Date_t date) {
     printf("/");
     printf("%i", date.year);
     printf("\n");
+}
+
+/**
+ * getPhone
+ * Function gets user input and checks if it is all digits
+ * @return user's phone number
+ **/
+int getPhoneNo() {
+    while (1) {
+        char input[10];
+        int invalidInput = 0;
+        printf("Please enter user's phone number:");
+        scanf("%s", input);
+        int i;
+        for (i = 0; i < strlen(input); i++) {
+            /* Checks ASCII value to see if character is a number */
+            if (input[i] < 48 || input[i] > 57) {
+                printf("Please enter digits only!\n");
+                invalidInput = 1;
+                break;
+            }
+        }
+        if (invalidInput) {
+            continue;
+        }
+        return atoi(input);
+    }
 }
