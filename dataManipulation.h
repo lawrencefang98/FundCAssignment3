@@ -15,7 +15,8 @@
     #define MAX_RECORD_DESCRIPTION_LENGTH 2000
     #define MAX_PHONENO_LENGTH 10
     #define MAX_JOB_TITLE_LENGTH 50
-
+    #define TRUE 1
+    #define FALSE 0
 
 
     /* STRUCTURE DEFINITIONS */
@@ -52,10 +53,9 @@
      * Stores information related to a doctor's information
     **/
     struct Doctor {
-        User_t doctorUser;
+        int userId;
         int doctorId;
         Date_t startDate;
-        Date_t endDate;
     };
     typedef struct Doctor Doctor_t;
 
@@ -79,23 +79,21 @@
     struct PatientInfo {
         User_t patientUser;
         char bloodType[3];
-        Doctor_t primaryDoctor;
+        int primaryDoctorID;
         MedicalRecord_t*  medicalRecordHistory;
 
     };
     typedef struct PatientInfo PatientInfo_t;
-
-
-
-
 
     /**
      * Author: Lawrence Fang
      * Stores information related to administrative staff
     **/
     struct AdminStaff {
-        User_t staffUser;
+        int userId;
+        int staffId;
         char jobTitle[MAX_JOB_TITLE_LENGTH];
+        Date_t startDate;
     };
     typedef struct AdminStaff AdminStaff_t;
 
@@ -116,23 +114,28 @@
     };
     typedef struct Clinic Clinic_t;
     /*Constructor for Clinic*/
-    void createClinic(Clinic_t clinic);
 
     /* FUNCTION DEFINITIONS */
 
     /*User Related Functions*/
-    void createUser(Clinic_t clinic);
-    void deletelastUser(Clinic_t clinic, User_t userToDelete);
-    User_t searchUser(Clinic_t clinic);
-    void editUser(Clinic_t clinic, User_t userToEdit, int editOption);
+    void createUser(Clinic_t *clinic);
+    void deletelastUser(Clinic_t *clinic);
+    void searchUser(Clinic_t *clinic);
+    void editUser(Clinic_t *clinic);
 
-
+    /*Staff Related Functions*/
+    void createDoctor(Clinic_t *clinic);
+    void deleteDoctor(Clinic_t *clinic);
+    void createAdminStaff(Clinic_t *clinic);
+    void deleteAdminStaff(Clinic_t *clinic);
+    void editAdminStaffTitle(Clinic_t *clinic);
+    
     /*Patient Related Functions*/
-    PatientInfo_t createPatientInfo(Clinic_t clinic, User_t user);
-    void assignDoctor(Clinic_t clinic, PatientInfo_t patient, Doctor_t doctor);
-    void deletePatientInfo(Clinic_t clinic, PatientInfo_t patientToDelete);
-    PatientInfo_t searchPatientInfo(Clinic_t clinic, User_t userToSearch);
-    void editPatientInfo(Clinic_t clinic, PatientInfo_t patientInfoToEdit);
+    void createPatient(Clinic_t *clinic);
+    void assignDoctor(Clinic_t *clinic);
+    void deletePatientInfo(Clinic_t *clinic);
+    PatientInfo_t searchPatientInfo(Clinic_t *clinic);
+    void editPatientInfo(Clinic_t *clinic);
 
 
     /*Medical Record Related Functions*/
@@ -140,23 +143,18 @@
     void deleteMedicalRecord(MedicalRecord_t medicalRecordToDelete);
     void searchMedicalRecord(int searchOption);
 
-    /*Staff Related Functions*/
-    Doctor_t createDoctor(User_t user);
-    void deleteDoctor(Doctor_t doctorToDelete);
-    void editDoctor(Doctor_t doctorToEdit, int editOption);
-    void setDoctorDates(Doctor_t doctorToEdit, int editOption);
-    AdminStaff_t createAdminStaff(User_t user);
-    void deleteAdminStaff(AdminStaff_t adminStaffToDelete);
-    void editAdminStaffTitle(AdminStaff_t adminStaffToEdit);
+
 
     /*Getter Functions*/
     Date_t getDate();
     int getPhoneNo();
+    User_t getUser(Clinic_t *clinic);
 
     /*Print Functions*/
     void printDate(Date_t date);
     void userToString(User_t userToDisplay);
     void patientInfoToString(PatientInfo_t patientInfoToDisplay);
     void medicalRecordToString(MedicalRecord_t medicalRecordToDisplay);
+    void adminStaffToString(AdminStaff_t adminStaffToDisplay);
     void doctorToString(Doctor_t doctorToDisplay);
     void medicalRecordToString(MedicalRecord_t medicalRecordToDisplay);
