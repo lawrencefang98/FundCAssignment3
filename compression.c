@@ -1,190 +1,221 @@
-/*  
-compression algorithm based on huffman coding to compress text files 
-Steps: 
-1.Calculate the frequency of each character in the text file 
-2.Sort the characters in increasing order of the frequency.These are stored in a priority queue. 
-3.Make each unqiue character as a leaf node. 
-4.Create an empty node. Assign the minimum frequency to the leftr child of z and assign the second minimum frequency to t 
-*/ 
-
-// Huffman Coding in C
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define MAX_TREE_HT 50
-
-struct MinHNode {
-  char item;
-  unsigned freq;
-  struct MinHNode *left, *right;
+struct minNode{
+    char symbol;
+    int frequency;
+    struct minNode* left, *right;
 };
+typedef struct minNode minNode;
 
-struct MinHeap {
-  unsigned size;
-  unsigned capacity;
-  struct MinHNode **array;
+struct minHeap{
+    int currentSize;
+    int capacity;
+    struct minNode **array;
 };
+typedef struct minHeap minHeap;
 
-// Create nodes
-struct MinHNode *newNode(char item, unsigned freq) {
-  struct MinHNode *temp = (struct MinHNode *)malloc(sizeof(struct MinHNode));
 
-  temp->left = temp->right = NULL;
-  temp->item = item;
-  temp->freq = freq;
-
-  return temp;
+struct minNode* createNode(char symbol,int frequency){
+    struct minNode *newNode = (struct minNode *)malloc(sizeof(struct minNode));
+    newNode->left = NULL;
+    newNode->right = NULL;
+    newNode->symbol = symbol;
+    newNode->frequency = frequency;
+    return newNode;
 }
 
-// Create min heap
-struct MinHeap *createMinH(unsigned capacity) {
-  struct MinHeap *minHeap = (struct MinHeap *)malloc(sizeof(struct MinHeap));
-
-  minHeap->size = 0;
-
-  minHeap->capacity = capacity;
-
-  minHeap->array = (struct MinHNode **)malloc(minHeap->capacity * sizeof(struct MinHNode *));
-  return minHeap;
+struct minHeap* createMinHeap(int capacity){
+    struct minHeap *minPriorityHeap = (struct minHeap *)malloc(sizeof(struct minHeap));
+    minPriorityHeap->currentSize=0;
+    minPriorityHeap->capacity = capacity;
+    minPriorityHeap->array = (struct minNode **)malloc(minPriorityHeap->capacity * sizeof(struct minNode *));
+    return minPriorityHeap;
 }
 
-// Function to swap
-void swapMinHNode(struct MinHNode **a, struct MinHNode **b) {
-  struct MinHNode *t = *a;
-  *a = *b;
-  *b = t;
+
+void orderHeap(struct minHeap *minPriorityHeap){
+    int i;
+    int f;
+    for(i = 0; i < minPriorityHeap->currentSize; i ++){
+        for(f = 0; f < minPriorityHeap->currentSize; f ++){
+            if(minPriorityHeap->array[i]->frequency < minPriorityHeap->array[f]->frequency){
+                struct minNode* temp;
+                temp = minPriorityHeap->array[i];
+                minPriorityHeap->array[i] = minPriorityHeap->array[f];
+                minPriorityHeap->array[f] = temp;
+            }
+        }
+    }
 }
 
-// Heapify
-void minHeapify(struct MinHeap *minHeap, int idx) {
-  int smallest = idx;
-  int left = 2 * idx + 1;
-  int right = 2 * idx + 2;
-
-  if (left < minHeap->size && minHeap->array[left]->freq < minHeap->array[smallest]->freq)
-    smallest = left;
-
-  if (right < minHeap->size && minHeap->array[right]->freq < minHeap->array[smallest]->freq)
-    smallest = right;
-
-  if (smallest != idx) {
-    swapMinHNode(&minHeap->array[smallest], &minHeap->array[idx]);
-    minHeapify(minHeap, smallest);
-  }
+void insertInHeap(struct minHeap *minPriorityHeap, struct minNode *minHeapNode ){
+    minPriorityHeap->array[minPriorityHeap->currentSize] = minHeapNode;
+    minPriorityHeap->currentSize++;
+    orderHeap(minPriorityHeap);
 }
 
-// Check if size if 1
-int checkSizeOne(struct MinHeap *minHeap) {
-  return (minHeap->size == 1);
+int isOneSize(struct minHeap* minPriorityHeap){
+    if(minPriorityHeap->currentSize == 1){
+        return 1;
+    }
+    return 0;
 }
 
-// Extract min
-struct MinHNode *extractMin(struct MinHeap *minHeap) {
-  struct MinHNode *temp = minHeap->array[0];
-  minHeap->array[0] = minHeap->array[minHeap->size - 1];
-
-  --minHeap->size;
-  minHeapify(minHeap, 0);
-
-  return temp;
+struct minNode* extractMins(struct minHeap* minPriorityHeap){
+    struct minNode *newNode = (struct minNode *)malloc(sizeof(struct minNode));
+    newNode->left = minPriorityHeap->array[0];
+    newNode->right = minPriorityHeap->array[1];
+    newNode->frequency = minPriorityHeap->array[0]->frequency + minPriorityHeap->array[1]->frequency;
+    minPriorityHeap->array[0] = newNode;
+    minPriorityHeap->array[1] = minPriorityHeap->array[minPriorityHeap->currentSize - 1];
+    minPriorityHeap->currentSize--;
+    orderHeap(minPriorityHeap);
+    return newNode;
 }
 
-// Insertion function
-void insertMinHeap(struct MinHeap *minHeap, struct MinHNode *minHeapNode) {
-  ++minHeap->size;
-  int i = minHeap->size - 1;
 
-  while (i && minHeapNode->freq < minHeap->array[(i - 1) / 2]->freq) {
-    minHeap->array[i] = minHeap->array[(i - 1) / 2];
-    i = (i - 1) / 2;
-  }
-  minHeap->array[i] = minHeapNode;
+/*Gets the frequency of each character*/
+void getFrequency(char symbol[], int freq[]){
+    int i;
+
+    FILE *fp = fopen("database.txt","r");
+
+    int c;
+
+    while((c=fgetc(fp))){
+        if (c == EOF) break;
+        freq[c]+=1;
+    }
+    for(i=0; i<256; i++) {
+		if(freq[i] > 0){
+            symbol[i] = i;
+		}
+    }
+    fclose(fp);
+}
+int isLeaf(struct minNode *node){
+    if(node->left == NULL && node->right == NULL){
+        return 1;
+    }
+    return 0;
 }
 
-void buildMinHeap(struct MinHeap *minHeap) {
-  int n = minHeap->size - 1;
-  int i;
 
-  for (i = (n - 1) / 2; i >= 0; --i)
-    minHeapify(minHeap, i);
+void table(struct minNode *node,int arr[], int top,char huffmanTable[], char huffmanTableB[][30],int *counter2){
+    if(node->left != NULL){
+        arr[top] = 0;
+        table(node->left,arr,top+1,huffmanTable,huffmanTableB,counter2);
+    }
+
+    if(node->right != NULL){
+        arr[top] = 1;
+        table(node->right,arr,top+1,huffmanTable,huffmanTableB,counter2);
+    }
+
+    if(isLeaf(node) ==1){
+        int i;
+        huffmanTable[*counter2] = node->symbol;
+        for(i = 0;i < top;i++){
+            char charValue  = arr[i]+'0';
+            huffmanTableB[*counter2][i] = charValue;
+        }
+        (*counter2)++;
+    }
+
 }
 
-int isLeaf(struct MinHNode *root) {
-  return !(root->left) && !(root->right);
+void encode(char huffmanTable[], char huffmanTableB[][30]){
+    FILE *fp = fopen("database.txt","r");
+    FILE *fp2 = fopen("databaseCompressed.txt","w"); 
+    /*int currentBit = 0;
+    unsigned char bit_buffer = 0 ;
+    */
+    int c;
+    int i;
+    int f;
+    while((c=fgetc(fp))){
+        if (c == EOF) break;
+        for(i = 0; i < strlen(huffmanTable) ;i++){
+            if(huffmanTable[i] == c){
+                if (huffmanTableB[i]){
+                    for(f = 0;f < strlen(huffmanTableB[i]);f++){
+                        fwrite(&huffmanTableB[i][f],sizeof(char),1,fp2);
+                        /*if(huffmanTableB[i][f] == '1'){
+                            bit_buffer |= 1UL << 1;
+                            currentBit++;
+                            fwrite(&huffmanTable[i][f],sizeof(char),1,fp2);
+                        }
+                        if(huffmanTableB[i][f] == '0'){
+                            bit_buffer &= ~(1UL << 0);
+                            currentBit++;
+                        }
+                        if (currentBit == 8){
+                            fwrite (&bit_buffer, 1, 1, fp2);
+                            currentBit = 0;
+                            bit_buffer = 0;
+                        }
+                        */
+                    }
+                }
+            }
+        }  
+    }
+    fclose(fp);
+    fclose(fp2);
 }
 
-struct MinHeap *createAndBuildMinHeap(char item[], int freq[], int size) {
-  struct MinHeap *minHeap = createMinH(size);
-
-  for (int i = 0; i < size; ++i)
-    minHeap->array[i] = newNode(item[i], freq[i]);
-
-  minHeap->size = size;
-  buildMinHeap(minHeap);
-
-  return minHeap;
+void decode(struct minNode* root){
+    FILE *fp = fopen("databaseCompressed.txt","r");
+    FILE *fp2 = fopen("databaseDecompressed.txt","w");
+    int c;
+    struct minNode* currentNode = root;
+    while((c=fgetc(fp))){
+        if (c == EOF) break;
+        if(c == '0'){
+            currentNode = currentNode->left;
+        }
+        else{
+            currentNode = currentNode->right;
+        }
+        if(isLeaf(currentNode) == 1){
+            fwrite(&currentNode->symbol, sizeof(char),1,fp2);
+            printf("%c",currentNode->symbol);
+            currentNode= root;
+        }
+    }
+    fclose(fp);
+    fclose(fp2);
 }
 
-struct MinHNode *buildHuffmanTree(char item[], int freq[], int size) {
-  struct MinHNode *left, *right, *top;
-  struct MinHeap *minHeap = createAndBuildMinHeap(item, freq, size);
-
-  while (!checkSizeOne(minHeap)) {
-    left = extractMin(minHeap);
-    right = extractMin(minHeap);
-
-    top = newNode('$', left->freq + right->freq);
-
-    top->left = left;
-    top->right = right;
-
-    insertMinHeap(minHeap, top);
-  }
-  return extractMin(minHeap);
-}
-
-void printHCodes(struct MinHNode *root, int arr[], int top) {
-  if (root->left) {
-    arr[top] = 0;
-    printHCodes(root->left, arr, top + 1);
-  }
-  if (root->right) {
-    arr[top] = 1;
-    printHCodes(root->right, arr, top + 1);
-  }
-  if (isLeaf(root)) {
-    printf("  %c   | ", root->item);
-    printArray(arr, top);
-  }
-}
-
-// Wrapper function
-void HuffmanCodes(char item[], int freq[], int size) {
-  struct MinHNode *root = buildHuffmanTree(item, freq, size);
-
-  int arr[MAX_TREE_HT], top = 0;
-
-  printHCodes(root, arr, top);
-}
-
-// Print the array
-void printArray(int arr[], int n) {
-  int i;
-  for (i = 0; i < n; ++i)
-    printf("%d", arr[i]);
-
-  printf("\n");
-}
-
-int main() {
-  char arr[] = {'A', 'B', 'C', 'D'};
-  int freq[] = {5, 1, 6, 3};
-
-  int size = sizeof(arr) / sizeof(arr[0]);
-
-  printf(" Char | Huffman code ");
-  printf("\n--------------------\n");
-
-  HuffmanCodes(arr, freq, size);
+int main(){
+    struct minHeap* minPriorityQ;
+	char character[256] = {0};
+    int frequency[256] = {0};
+    char huffmanTable[256] = {};
+    char huffmanTableB[256][30] = {};
+    int i;
+    int counter = 0;
+    int counter2 = 0;
+    getFrequency(character,frequency);
+    for(i = 0; i < 256; i++){
+        if(frequency[i]> 0){
+        counter++;
+        }
+    }
+    minPriorityQ = createMinHeap(counter);
+    for(i = 0; i < 256; i++){
+        if(frequency[i]> 0){
+            insertInHeap(minPriorityQ,createNode(character[i],frequency[i]));
+        }
+    }
+    while(isOneSize(minPriorityQ) == 0){
+        extractMins(minPriorityQ);
+    }
+    int arr[256],top = 0;
+    table(minPriorityQ->array[0],arr, top,huffmanTable,huffmanTableB,&counter2);
+    encode(huffmanTable,huffmanTableB);
+    decode(minPriorityQ->array[0]);
+    return 0;
 }
