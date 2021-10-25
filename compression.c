@@ -128,10 +128,9 @@ void table(struct minNode *node,int arr[], int top,char huffmanTable[], char huf
 
 void encode(char huffmanTable[], char huffmanTableB[][30]){
     FILE *fp = fopen("database.txt","r");
-    FILE *fp2 = fopen("databaseCompressed.txt","w"); 
-    /*int currentBit = 0;
-    unsigned char bit_buffer = 0 ;
-    */
+    FILE *fp2 = fopen("databaseCompressed.txt","wb"); 
+    int currentBit = 0;
+    char bit_buffer = 0 ;
     int c;
     int i;
     int f;
@@ -139,26 +138,23 @@ void encode(char huffmanTable[], char huffmanTableB[][30]){
         if (c == EOF) break;
         for(i = 0; i < strlen(huffmanTable) ;i++){
             if(huffmanTable[i] == c){
-                if (huffmanTableB[i]){
                     for(f = 0;f < strlen(huffmanTableB[i]);f++){
-                        fwrite(&huffmanTableB[i][f],sizeof(char),1,fp2);
-                        /*if(huffmanTableB[i][f] == '1'){
-                            bit_buffer |= 1UL << 1;
-                            currentBit++;
-                            fwrite(&huffmanTable[i][f],sizeof(char),1,fp2);
+                        /*fwrite(&huffmanTableB[i][f],sizeof(char),1,fp2);*/
+                        if(huffmanTableB[i][f] == '1'){
+                            bit_buffer |= 1 << currentBit;
+                        }else if(huffmanTableB[i][f] == '0'){
+                            bit_buffer &= ~(1 << currentBit);
                         }
-                        if(huffmanTableB[i][f] == '0'){
-                            bit_buffer &= ~(1UL << 0);
-                            currentBit++;
-                        }
+                        currentBit++;
+                        /*printf("%c",huffmanTableB[i][f]);*/
                         if (currentBit == 8){
                             fwrite (&bit_buffer, 1, 1, fp2);
+                            /*for(h = 0; h< 8; h ++)
+                                printf("%d", (bit_buffer >> h) & 0x01);*/
                             currentBit = 0;
                             bit_buffer = 0;
                         }
-                        */
                     }
-                }
             }
         }  
     }
@@ -167,22 +163,24 @@ void encode(char huffmanTable[], char huffmanTableB[][30]){
 }
 
 void decode(struct minNode* root){
-    FILE *fp = fopen("databaseCompressed.txt","r");
+    FILE *fp = fopen("databaseCompressed.txt","rb");
     FILE *fp2 = fopen("databaseDecompressed.txt","w");
     int c;
+    int h;
     struct minNode* currentNode = root;
-    while((c=fgetc(fp))){
-        if (c == EOF) break;
-        if(c == '0'){
-            currentNode = currentNode->left;
-        }
-        else{
-            currentNode = currentNode->right;
-        }
-        if(isLeaf(currentNode) == 1){
-            fwrite(&currentNode->symbol, sizeof(char),1,fp2);
-            printf("%c",currentNode->symbol);
-            currentNode= root;
+    while(c!=EOF){
+        c=fgetc(fp);
+        for(h = 0; h< 8; h ++){
+            if(((c >> h) & 0x01) == 0){
+                currentNode = currentNode->left;
+            }
+            else{
+                currentNode = currentNode->right;
+            }
+            if(isLeaf(currentNode) == 1){
+                fwrite(&currentNode->symbol, sizeof(char),1,fp2);
+                currentNode= root;
+            }
         }
     }
     fclose(fp);
@@ -215,6 +213,9 @@ int main(){
     }
     int arr[256],top = 0;
     table(minPriorityQ->array[0],arr, top,huffmanTable,huffmanTableB,&counter2);
+    /*for(i =0 ; i < counter ; i++){
+    printf("%c %s\n",huffmanTable[i],huffmanTableB[i]);
+    }*/
     encode(huffmanTable,huffmanTableB);
     decode(minPriorityQ->array[0]);
     return 0;
