@@ -98,7 +98,7 @@ int checkUser(const char* user)
 int checkPass(const char* pass)
 void loginUser();
 
-/****data manupilation***/
+/****File handling***/
 User_t createUser();
 void deleteUser(User_t userToDelete);
 User_t searchUser();
