@@ -133,7 +133,7 @@ int main(void){
     scanf("%s",selection1);/*reads the input stream and stores it in selection*/
     choice1=atoi(selection1);
             
-    while (choice>7 || choice1<1 || check==0){
+    while (choice>6|| choice1<1 || check==0){
     
         check=1;
         printf("Invalid choice.");
@@ -156,23 +156,19 @@ int main(void){
 
         case 3:
         /* Save to database*/
-        break; */
+        break; 
 
         case 4:
         /* read from database*/
-        break; */
+        break; 
 
         case 5:
         /*compress the file*/
-        break; */
+        break; 
 
         case 6:
         /* Encrypt the file*/
-         break; */
-
-        case 7:
-        /* Add function to delete user*/
-        break; */
+         break; 
 
            }
             
