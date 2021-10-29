@@ -169,7 +169,10 @@ int main(void){
         case 6:
         /* Encrypt the file*/
          break; 
-
+            
+        case 7:
+        /* decrypt the file*/
+         break; 
            }
             
                 return 1;
@@ -184,7 +187,8 @@ void printMenu1(void){
          "4. Read from Database\n"
          "5. Compress the file\n"
          "6. Encrypt the file\n"
-         "7. Exit the program\n");
+         "7. Decyrpt the file\n"
+         "8. Exit the program\n");
 }
 
 void printdoctor(){
