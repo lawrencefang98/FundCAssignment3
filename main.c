@@ -51,35 +51,43 @@ int main(void){
             break;
 
             case 3:
-            /* Save to database*/
+            /* Save doctor to database*/
+            break; 
+                
+            case 4:
+            /* save patient */
+            break; 
+                
+            case 5:
+            /* save admin */
             break; 
 
-            case 4:
+            case 6:
             /* read from database*/
             break; 
 
-            case 5:
+            case 7:
             /* compress the file*/
                 compression();
             break; 
 
-            case 6:
+            case 8:
             /* Encrypt the file*/
                 loginMenu();
             break; 
             
-            case 7:
+            case 79:
             /* decrypt the file*/
             break; 
 
-            case 8:
+            case 10:
             exit(0);
             default:
                 check=1;
                 printf("Invalid choice.");
             break;
             }
-    }while (choice1 < 7 || choice1 > 1 || check == 0);
+    }while (choice1 < 10 || choice1 > 1 || check == 0);
     
             
         return 1;
