@@ -30,7 +30,7 @@ int mergefile(void);
 void saveAdminstaff(Clinic_t *clinic)
 {
 	int numAdminStaff = clinic->adminStaffCount;
-	FILE* file = fopen("Adminstaff.txt", "w+");
+	FILE* file = fopen("Adminstaff.txt", "w");
 	/*open file failed*/
 	if (file == NULL)
 	{
