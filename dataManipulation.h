@@ -146,6 +146,8 @@ void displayAdminStaffList(Clinic_t *clinic);
 void createPatient(Clinic_t *clinic);
 void patientInfoToString(PatientInfo_t patientInfoToDisplay);
 void displayPatientList(Clinic_t *clinic);
+void searchPatient(Clinic_t *clinic);
+PatientInfo_t getPatient(Clinic_t *clinic);
 
 /*Date Functions*/
 Date_t getDate();
@@ -398,6 +400,7 @@ void userToString(User_t userToDisplay)
 /**
  * getUser
  * Function gets user input and checks if there is an associated user
+ * @param Clinic_t clinic: pointer to clinic
  * @return user_t user, returns blank user if not found
  **/
 User_t getUser(Clinic_t *clinic)
@@ -805,8 +808,9 @@ void createPatient(Clinic_t *clinic)
         break;
     }
 
-    printf("New Patient Information\n");
+    printf("New Patient Information\n\n");
     patientInfoToString(clinic->patientList[clinic->patientListCount]);
+    printf("\n");
     clinic->patientListCount += 1;
 }
 
@@ -820,6 +824,49 @@ void patientInfoToString(PatientInfo_t patientInfoToDisplay)
     printf("Patient User Id: %i\n", patientInfoToDisplay.userID);
     printf("Patient Blood Type: %s\n", patientInfoToDisplay.bloodType);
     printf("Patient primary doctor: %i\n", patientInfoToDisplay.primaryDoctorID);
+}
+
+/**
+ * searchUser
+ * Asks for user information and looks for a patient if it exists and displays user info
+ *@param Clinic_t clinic: pointer to clinic
+**/
+void searchPatient(Clinic_t *clinic)
+{
+    PatientInfo_t searchedPatient = getPatient(clinic);
+    if (searchedPatient.userID == 0) {
+        printf("No patient found!\n");
+    }
+    else
+    {
+        printf("\n");
+        printf("Patient found! Displaying patient information.\n\n");
+        patientInfoToString(searchedPatient);
+    }
+    
+}
+
+/**
+ * getPatient
+ * Function gets user input and checks if there is an associated patient
+ * @param Clinic_t clinic: pointer to clinic
+ * @return PatientInfo_t patient, returns blank user if not found
+ **/
+PatientInfo_t getPatient(Clinic_t *clinic)
+{
+    printf("Please enter patient's user ID:");
+    int idInput;
+    scanf("%i", &idInput);
+    int i;
+    for (i = 0; i < clinic->patientListCount; i++)
+    {
+        if (clinic->patientList[i].userID == idInput)
+        {
+            return clinic->patientList[i];
+        }
+    }
+    PatientInfo_t emptyPatient = {0, "", 0};
+    return emptyPatient;
 }
 
 /**
