@@ -162,7 +162,7 @@ void saveAdminstaff(AdminStaff_t adminstaffs[], int numAdminStaff)
  * outputs:
  * - none
 *******************************************************************************/
-void void saveDoctors(Doctor_t doctors[], int numDoctor);
+void saveDoctors(Doctor_t doctors[], int numDoctor);
 {
     FILE* file = fopen("Doctor.txt", "w");
 	/*open file failed*/
