@@ -1,9 +1,11 @@
+
 /******************************************************************************
  *                               HEADER GUARDS                                *
  ******************************************************************************/
 
-#ifndef FINAL_AT3_LOGIN_H
-#define FINAL_AT3_LOGIN_H
+#ifndef TEST_LOGIN_H
+#define TEST_LOGIN_H
+
 
 /******************************************************************************
  *                               HEADER FILES                                 *
@@ -52,13 +54,12 @@ void addUser(user_t accounts[], int* total_p);
 void saveUser(user_t accounts[], int* total_p);
 
 /* Validity Check */
-int validCred(const char credentials[]);
+int checkChar(const char password[]);
+int checkCharNum(const char password[]);
+int checkSpace(const char password[]);
 
-/* Debugging */
-int checkChar(const char string[]);
-int checkCharNum(const char string[]);
-int checkSpace(const char string[]);
-int checkPeriod(const char string[]);
+/* Login Check */
+int validCred(const char credentials[]);
 
 /******************************************************************************
  *                                FUNCTIONS                                   *
@@ -90,7 +91,6 @@ _Noreturn void loginMenu()
         if (choice == 1)
         {
             loginUser(total_p);
-            printf("\n\n");
             printMenu();
             scanf("%d", &choice);
         }
@@ -98,7 +98,6 @@ _Noreturn void loginMenu()
         else if (choice == 2)
         {
             addUser(accounts, total_p);
-            printf("\n\n");
             printMenu();
             scanf("%d", &choice);
         }
@@ -106,13 +105,6 @@ _Noreturn void loginMenu()
         else if (choice == 3)
         {
             exit(EXIT_SUCCESS);
-        }
-
-        else
-        {
-            printf("\nERROR | Invalid menu choice. Please try again.\n");
-            printf("\nEnter your choice: ");
-            scanf("%d", &choice);
         }
     }
 }
@@ -130,10 +122,10 @@ void printMenu()
     printf("\n                    LOGIN MENU                    ");
     printf("\n--------------------------------------------------");
     printf("\nPlease choose from the following options: ");
-    printf("\n  1. Login to an account");
-    printf("\n  2. Create an account");
-    printf("\n  3. Exit the program");
-    printf("\n\nEnter your choice: ");
+    printf("\n  Press [1] to login to an account");
+    printf("\n  Press [2] to create an account");
+    printf("\n  Press [3] to exit the program");
+    printf("\nLOGIN MENU | Enter your choice: ");
 }
 
 /******************************************************************************
@@ -164,12 +156,6 @@ void addUser(user_t accounts[], int* total_p)
         printf("\nADD USER | Enter your employee ID: ");
         scanf("%8s", accounts[i].username);
 
-        if(validCred(accounts[i].username) > 1)
-        {
-            printf("ERROR | Account already exists.");
-            loginMenu();
-        }
-
         /* Debug: Username may only include numeric characters */
         while(checkCharNum(accounts[i].username) == 0)
         {
@@ -178,13 +164,25 @@ void addUser(user_t accounts[], int* total_p)
             scanf("%8s", accounts[i].username);
         }
 
-        /* Debug: User will be prompted to enter user ID with no spaces */
-        while(checkSpace(accounts[i].username) == 1)
+        while(strlen(accounts[i].username) > ID_LEN)
         {
-            printf("ERROR | Your employee ID not contain spaces.");
+            printf("ERROR | Your ID must not be greater than 8 chars.");
             printf("\nADD USER | Enter your employee ID: ");
-            scanf("%20s", accounts[i].username);
-            break;
+            scanf("%8s", accounts[i].username);
+        }
+
+        while(strlen(accounts[i].username) < ID_LEN)
+        {
+            printf("ERROR | Your ID must not be less than 8 chars.");
+            printf("\nADD USER | Enter your employee ID: ");
+            scanf("%8s", accounts[i].username);
+        }
+
+        while((checkSpace(accounts[i].username) == 1))
+        {
+            printf("ERROR | Your ID must not include spaces.");
+            printf("\nADD USER | Enter your employee ID: ");
+            scanf("%8s", accounts[i].username);
         }
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -197,8 +195,8 @@ void addUser(user_t accounts[], int* total_p)
         /* Debug: User will be prompted to enter pass with no special chars */
         while(checkChar(accounts[i].password) == 0)
         {
-            printf("\nERROR | You may only include alphanumeric characters.");
-            printf("\nADD USER | Enter your password: ");
+            printf("ERROR | You may only include alphanumeric characters");
+            printf("ADD USER | Enter your password: ");
             scanf("%20s", accounts[i].password);
             break;
         }
@@ -206,8 +204,8 @@ void addUser(user_t accounts[], int* total_p)
         /* Debug: User will be prompted to enter pass with no spaces */
         while(checkSpace(accounts[i].password) == 1)
         {
-            printf("\nERROR | Your password must not contain spaces.");
-            printf("\nADD USER | Enter your password: ");
+            printf("ERROR | Your password must not contain spaces");
+            printf("ADD USER | Enter your password: ");
             scanf("%20s", accounts[i].password);
             break;
         }
@@ -215,8 +213,8 @@ void addUser(user_t accounts[], int* total_p)
         /* Debug: User will be prompted to enter pass > or == min characters */
         while(strlen(accounts[i].password) < MIN_PASS_LEN)
         {
-            printf("\nERROR | Your password must be at least 10 characters.\n");
-            printf("\nADD USER | Enter your password: ");
+            printf("\nERROR | Your password must be at least 8 characters.\n");
+            printf("ADD USER | Enter your password: ");
             scanf("%20s", accounts[i].password);
             break;
         }
@@ -226,11 +224,11 @@ void addUser(user_t accounts[], int* total_p)
         {
             printf("\nERROR | Your password must not be greater than 20"
                    "characters.");
-
-            printf("\nADD USER | Enter your password: ");
+            printf("ADD USER | Enter your password: ");
             scanf("%20s", accounts[i].password);
             break;
         }
+
     }
 
     else
@@ -252,7 +250,7 @@ void addUser(user_t accounts[], int* total_p)
 
 void saveUser(user_t accounts[], int* total_p)
 {
-    FILE * file_p = fopen(LOGIN_DB,"a");
+    FILE * file_p = fopen(LOGIN_DB,"a+");
 
     if(file_p != NULL)
     {
@@ -267,20 +265,15 @@ void saveUser(user_t accounts[], int* total_p)
         }
     }
 
-    else
-    {
-        printf("ERROR | File does not exist.");
-    }
-
     fclose(file_p);
 }
 
 
-int checkCharNum(const char string[])
+int checkCharNum(const char username[])
 {
     int i = 0;
 
-    if(string[i] >= '0' && string[i] <= '9')
+    if(username[i] >= '0' && username[i] <= '9')
         return 1;
 
     else
@@ -288,14 +281,14 @@ int checkCharNum(const char string[])
 }
 
 
-int checkChar(const char string[])
+int checkChar(const char password[])
 {
     int i = 0;
 
     /* String only contains alphanumeric characters */
-    if((string[i] >= 'A' && string[i] <= 'Z') ||
-       (string[i] >= 'a' && string[i] <= 'z') ||
-       (string[i] >= '0' && string[i] <= '9'))
+    if((password[i] >= 'A' && password[i] <= 'Z') ||
+       (password[i] >= 'a' && password[i] <= 'z') ||
+       (password[i] >= '0' && password[i] <= '9'))
     {
         return 1;
     }
@@ -304,29 +297,17 @@ int checkChar(const char string[])
         return 0;
 }
 
-int checkSpace(const char string[])
+int checkSpace(const char password[])
 {
     int i = 0;
 
-    if(string[i] == ' ') /* String contains a space */
+    if(password[i] == ' ') /* String has a space */
         return 1;
 
     else
-        return 0;  /* String doesn't contain a space */
+        return 0;  /* String doesn't have a space */
 }
 
-int checkPeriod(const char string[])
-{
-    int i = 0;
-
-    if(string[i] == '.') /* String contains a period */
-        return 1;
-
-    else
-        return 0;  /* String doesn't contain a period */
-}
-
-/* Read existing account information from file */
 int validCred(const char credentials[])
 {
     FILE *file_p = fopen(LOGIN_DB, "r");
@@ -357,89 +338,102 @@ int validCred(const char credentials[])
         }
     }
 
+    fclose(file_p);
+
     return i;
 }
 
 
+
 void loginUser(int* total_p)
 {
-    int j = 0; /* Counter variable for failed password attempts */
+    /* Counter variable for failed password attempts */
+    int j = 0;
 
-    user_t login; /* Struct 'login' used for login input */
+    /* Struct 'login' used for login input */
+    user_t login;
+
+    printf("\nLOGIN | User ID: ");
+    scanf("%10s", login.username);
+
+    printf("LOGIN | Password: ");
+    scanf("%s", login.password);
 
     if(total_p == 0)
     {
-        printf("\nERROR | No user accounts exist.\n");
-        loginMenu();
+        printf("ERROR | No accounts exist.");
     }
 
     else
     {
-        printf("\nLOGIN | User ID: ");
-        scanf("%8s", login.username);
-
-        printf("LOGIN | Password: ");
-        scanf("%8s", login.password);
-
         if(validCred(login.username) == 1 && validCred(login.password) == 1)
         {
-            printf("\n\n\n");
-            printf("                LOGIN SUCCESSFUL                ");
-            printf("\n\n\n");
+            printf("\n\n                LOGIN SUCCESSFUL                \n\n");
 
             cipherMenu();
         }
 
         else
         {
-            if(j > 2)
-            {
-                printf("\nERROR | Too many failed login attempts.\n");
-                /* TODO: return to main menu */
-                exit(EXIT_FAILURE);
-            }
-
             while(validCred(login.username) == 0 ||
                   validCred(login.password) == 0)
             {
-                printf("\nERROR | Invalid username or password.\n");
+                printf("\nERROR | Incorrect username or password.");
                 j++;
                 break;
             }
 
-            while(checkCharNum(login.username) == 0)
+            while(strcmp(login.username, "\0") == 0)
             {
-                printf("\nERROR | Your username may only include numeric "
-                       "characters.\n");
+                printf("\nERROR | Empty user ID.");
+                j++;
+                break;
+
+            }
+
+            while(strlen(login.username) < ID_LEN)
+            {
+                printf("\nERROR | User ID must not be less than 8 characters.");
                 j++;
                 break;
             }
 
-            while(checkSpace(login.username) == 1 ||
-                  checkSpace(login.username) == 1)
+            while(strlen(login.username) > ID_LEN)
             {
-                printf("\nERROR | Your credentials may not include spaces.\n");
+                printf("\nERROR | User ID must not exceed 8 characters.");
                 j++;
                 break;
             }
 
-            while(checkPeriod(login.username) == 1 ||
-                  checkPeriod(login.username) == 1)
+            while(strcmp(login.password, "\0") == 0)
             {
-                printf("\nERROR | Your credentials may not include spaces.\n");
+                printf("\nERROR | Empty password.");
                 j++;
                 break;
             }
 
-            while(checkChar(login.password) == 0)
+            while(strlen(login.password) < MAX_PASS_LEN)
             {
-                printf("\nERROR | Your password may only include alphanumeric "
-                       "characters.\n");
+                printf("\nERROR | Password must be at least 8 characters\n");
                 j++;
                 break;
+            }
+
+            while(strlen(login.password) > MAX_PASS_LEN)
+            {
+                printf("\nERROR | Password must not exceed 20 chars.\n");
+                j++;
+                break;
+            }
+
+            if(j > 3)
+            {
+                printf("\nERROR | Too many password attempts.");
+                /* return to main menu */
+                exit(EXIT_FAILURE);
             }
         }
     }
 }
 
-#endif /* FINAL_AT3_LOGIN_H */
+#endif /* TEST_LOGIN_H */
