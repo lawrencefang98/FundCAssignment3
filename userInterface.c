@@ -322,6 +322,16 @@ void add_doctor(){/*items to return*/
         printf("Enter Bloodtype>"); 
         scanf("%c",&temp6);
         scanf("%2[^\n]",PatInfo.bloodType);
+        
+        printf("\nEnter Doctor's First Name>"); 
+        scanf("%c",&temp7);
+        scanf("%[^\n]",clinicinfo.doctorList->doctorUser.firstName);
+        
+        printf("\nEnter Doctor's Last Name>"); 
+        scanf("%c",&temp7);
+        scanf("%[^\n]",clinicinfo.doctorList->doctorUser.lastName);
+        
+        
 
     pcount++;
 
