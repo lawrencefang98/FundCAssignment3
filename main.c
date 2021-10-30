@@ -98,14 +98,12 @@ void printMenu1(void){
     printf("\n\n"
          "1. For Doctor\n" 
          "2. For Admin\n"
-         "3. Save patient Database\n"
-         "4. Save doctor Database\n" 
-         "5. Save admin Database\n" 
-         "6. Read from Database\n"
-         "7. Compress the file\n"
-         "8. Encrypt the file\n"
-         "9. Decyrpt the file\n"
-         "10. Exit the program\n");
+         "3. Save to Database\n"
+         "4. Read from Database\n"
+         "5. Compress the file\n"
+         "6. Encrypt the file\n"
+         "7. Decyrpt the file\n"
+         "8. Exit the program\n");
 }
 
 void printdoctor(){
@@ -134,110 +132,97 @@ void printstaff(){
 
 
 void for_doctor(Clinic_t *clinicPtr){/*items to return*/
-
     char userinput1[256];
     int select1=0;
     int checkp=0;
     char temp;
-    
-    printdoctor(); 
+    do{
+        printdoctor();
+        printf("\nEnter your choice>");
+        scanf("%c",&temp);
+        scanf("%s",userinput1);
+        select1=atoi(userinput1);
+        switch (select1){
 
-    printf("\nEnter your choice>");
-    scanf("%c",&temp);
-    scanf("%s",userinput1);
-    select1=atoi(userinput1);
+            case 1:
+                createPatient(clinicPtr);
+                break; 
 
-    while (select1>3 || select1<1 || checkp==0){
-    checkp=1;
-    printf("Invalid choice.");
-    printdoctor();
-    printf("\nEnter your choice>");
-    scanf("%s",userinput1);
-    select1=atoi(userinput1);
+            case 2:
+                searchPatient(clinicPtr);
+                break;
 
-    }
-
-    switch (select1){
-
-    case 1:
-        createPatient(clinicPtr);
-    break; 
-            
-    case 2:
-        searchPatient(clinicPtr);
-    break;
-    
-    case 3:
-        displayPatientList(clinicPtr);
-    break;
-    }
+            case 3:
+                displayPatientList(clinicPtr);
+                break;
+            case 4:
+                checkp=1;
+                break;
+            default:
+                printf("Invalid choice.");
+        }
+    }while(checkp==0);
 }
 
 void for_staff(Clinic_t *clinicPtr){
 
-    
-    
-    
-    printstaff();
     char userinput2[2]; 
     int select2;
     int checks=0;
-    printf("Enter your choice>");
-    scanf("%s", userinput2);
-    select2=atoi(userinput2);
+    do{
+        printstaff();
+        printf("Enter your choice>");
+        scanf("%s", userinput2);
+        select2=atoi(userinput2);
+        switch (select2){
 
+            case 1:
+                createUser(clinicPtr);
+                break;
 
-    while (select2>10 || select2<1 || checks==0){
-    checks=1;
-    printf("Invalid choice.");
-    printf("Enter your choice>");
-    scanf("%s",userinput2);
-    select2=atoi(userinput2);
-
-    }
-
-    switch (select2){
-
-    case 1:
-        createUser(clinicPtr);
-    break;
-
-    case 2:
-        editUser(clinicPtr);
-    break;
+            case 2:
+                editUser(clinicPtr);
+                break;
     
-    case 3:
-        deleteLastUser(clinicPtr);
-    break;
+            case 3:
+                deleteLastUser(clinicPtr);
+                break;
 
-    case 4:
-        searchUser(clinicPtr);
-    break;
+            case 4:
+                searchUser(clinicPtr);
+                break;
 
-    case 5:
-        displayUserList(clinicPtr);
-    break;
+            case 5:
+                displayUserList(clinicPtr);
+                break;
    
-    case 6:
-        createDoctor(clinicPtr);
-    break;
+            case 6:
+                createDoctor(clinicPtr);
+                break;
 
-    case 7:
-        createAdminStaff(clinicPtr);
-    break;
+            case 7:
+                createAdminStaff(clinicPtr);
+                break;
         
-    case 8:
-        editAdminStaffTitle(clinicPtr);
-    break;
+            case 8:
+                editAdminStaffTitle(clinicPtr);
+                break;
             
-    case 9:
-        displayDoctorList(clinicPtr);
-    break;
+            case 9:
+                displayDoctorList(clinicPtr);
+                break;
             
-    case 10:
-        displayAdminStaffList(clinicPtr);
-    break;           
-    }
+            case 10:
+                displayAdminStaffList(clinicPtr);
+                break;           
+            case 11:
+                checks =1;
+                break;
+            default:
+                printf("Invalid choice.");
+                break;
+        }
+    }while (checks==0);
 }
 
 
