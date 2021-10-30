@@ -196,22 +196,11 @@ void printstaff(){
 
 void for_doctor(){/*items to return*/
 
-    Clinic_t clinicinfo;
-    PatientInfo_t PatInfo;
-    /*MedicalRecord_t medInfo;*/
-
     char userinput1[256];
     int select1=0;
-    char temp,temp1,temp2,temp3,temp4,temp5,temp6;/*temp7;*/
     int pcount=0;
     int checkp=0;
-    char birthdayin[365]; 
-    char monthin[365];
-    char yearin[365];
-    char phonenum[200];
-    int checka=1; 
-    int checkb=1;
-    int checkc=1;
+    
     
     printdoctor(); 
 
