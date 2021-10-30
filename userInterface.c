@@ -96,11 +96,6 @@ int main(void){
     Doctor_t doctorinfo[MAX_DOCTORS];
     admin_s admin_t[MAX_ADMIN_STAFF];
 
-  /*  int admincount=0;
-    int doctorcount=0;
-    int patientcount=0;
-    int admincount=0;
-    int usercount=0;*/ 
 
     int check=1;
     int choice1=0;
