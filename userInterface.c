@@ -216,27 +216,38 @@ void printstaff(){
 }
 
 
+void add_doctor(){/*items to return*/
 
-void add_doctor(/*items to return*/){
+    Clinic_t clinicinfo;
+    PatientInfo_t PatInfo;
+    /*MedicalRecord_t medInfo;*/
 
     char userinput1[256];
     int select1=0;
-    char temp,temp1,temp2,temp3,temp4,temp5,temp6,temp7;
-    int checkp;
+    char temp,temp1,temp2,temp3,temp4,temp5,temp6;/*temp7;*/
+    int pcount=0;
+    int checkp=0;
+    char birthdayin[365]; 
+    char monthin[365];
+    char yearin[365];
+    char phonenum[200];
+    int checka=1; 
+    int checkb=1;
+    int checkc=1;
     
     printdoctor(); 
 
-    printf("Enter your choice>");
-    scanf("%s",userinput1);/*reads the input stream and stores it in selection*/
+    printf("\nEnter your choice>");
+    scanf("%c",&temp);
+    scanf("%s",userinput1);
     select1=atoi(userinput1);
-
 
     while (select1>7 || select1<1 || checkp==0){
     checkp=1;
     printf("Invalid choice.");
-    printpatient();
-    printf("Enter your choice>");
-    scanf("%s",userinput1);/*reads the input stream and stores it in selection*/
+    printdoctor();
+    printf("\nEnter your choice>");
+    scanf("%s",userinput1);
     select1=atoi(userinput1);
 
     }
@@ -244,9 +255,84 @@ void add_doctor(/*items to return*/){
     switch (select1){
 
     case 1:
+    
+    if (pcount<MAX_PATIENTS){
+    printf("\nEnter First Name>"); 
+    scanf("%c",&temp1);
+    scanf("%[^\n]",clinicinfo.patientList->patientUser.firstName);
+    
+    printf("Enter Last Name>"); 
+    scanf("%c",&temp1);
+    scanf("%[^\n]",clinicinfo.patientList->patientUser.lastName);
 
+    printf("Enter birthday: day>");
+    scanf("%s",birthdayin);
+    clinicinfo.patientList->patientUser.dateOfBirth.day=atoi(birthdayin);
+
+    while(clinicinfo.patientList->patientUser.dateOfBirth.day<1||clinicinfo.patientList->patientUser.dateOfBirth.day>31||checka==0){
+        
+        checka=1;
+        printf("Invalid day. Enter birthday: day>");
+        scanf("%s",birthdayin); 
+        clinicinfo.patientList->patientUser.dateOfBirth.day=atoi(birthdayin);
+    }
+
+        printf("Enter birthday: month>");
+        scanf("%s",monthin);
+        clinicinfo.patientList->patientUser.dateOfBirth.month=atoi(monthin);
+
+    while(clinicinfo.patientList->patientUser.dateOfBirth.month<1||clinicinfo.patientList->patientUser.dateOfBirth.month>12||checkb==0)
+{
+        checkb=1;
+        printf("Invalid month. Enter birthday: month>");
+        scanf("%s",monthin);
+        clinicinfo.patientList->patientUser.dateOfBirth.month=atoi(monthin);
+}
+
+        printf("Enter birthday: year>");
+        scanf("%s",yearin);
+        clinicinfo.patientList->patientUser.dateOfBirth.year=atoi(yearin);
+
+    while(clinicinfo.patientList->patientUser.dateOfBirth.year<1900||clinicinfo.patientList->patientUser.dateOfBirth.year>2021||checkc==0)
+{
+        checkc=1;
+        printf("Invalid year. Enter birthday: year>");
+        scanf("%s",yearin);
+        clinicinfo.patientList->patientUser.dateOfBirth.year=atoi(yearin);
+}
+
+        printf("Enter Email ID>"); 
+        scanf("%c",&temp2);
+        scanf("%50[^\n]",clinicinfo.patientList->patientUser.email);
+
+        printf("Enter Phone Number>"); 
+        scanf("%c",&temp3);
+        scanf("%9[^\n]",phonenum);
+        clinicinfo.patientList->patientUser.phoneNo=atoi(phonenum);
+
+        printf("Enter Address>"); 
+        scanf("%c",&temp4);
+        scanf("%255[^\n]",clinicinfo.patientList->patientUser.address);
+
+        printf("Enter Gender (Enter M or F)>"); 
+        scanf("%c",&temp5);
+        scanf("%1[^\n]",clinicinfo.patientList->patientUser.gender);
+
+        printf("Enter Bloodtype>"); 
+        scanf("%c",&temp6);
+        scanf("%2[^\n]",PatInfo.bloodType);
+
+    pcount++;
+
+    }
+
+    else{
+
+        printf("Patient List is full");
+    }
+    
     break;
-
+            
     case 2:
 
     break;
