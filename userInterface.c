@@ -85,6 +85,7 @@ typedef struct AdminStaff AdminStaff_t;
 void printMenu1(void);
 void printdoctor(void);
 void printstaff(void);
+void add_doctor();
 
 /******login****/
 void printMenu();
