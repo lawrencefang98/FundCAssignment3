@@ -112,8 +112,9 @@ void printstaff(){
          "6. Add New Doctor\n"
          "7. Add New Admin Staff\n"
          "8. Edit Admin Staff Title\n"           
-         "9. View all doctor details\n";
-         "10. View all staff details\n";
+         "9. View all doctor details\n"
+         "10. View all staff details\n"
+         "11. Return to Main Menu\n";
     
 }
 
