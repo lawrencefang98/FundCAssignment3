@@ -92,10 +92,10 @@ Main1
 *******************************************************************************/
 int main(void){ 
 
-    PatientInfo_t Patientinfo[MAX_PATIENTS]; 
-    Doctor_t doctorinfo[MAX_DOCTORS];
-    admin_s admin_t[MAX_ADMIN_STAFF];
-
+    struct User *userListcount
+    struct patientInfo *patientListcount
+    struct doctor *doctorListcount
+    struct adminstaff *adminListcount
 
     int check=1;
     int choice1=0;
@@ -228,7 +228,7 @@ void for_doctor(){/*items to return*/
 
     else{
 
-        printf("Patient List is full"); /*for the doctor to input*/
+        printf("Patient List is full"); 
     }
     
     break;
