@@ -89,13 +89,12 @@ int main(void){
             break; 
 
             case 12:
-            exit(0);
-            default:
                 check=1;
+            default:
                 printf("Invalid choice.");
             break;
             }
-    }while (choice1 < 12 || choice1 > 1 || check == 0);
+    }while (check == 0);
     
             
         return 1;
