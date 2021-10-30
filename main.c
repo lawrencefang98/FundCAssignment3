@@ -24,7 +24,7 @@ int main(void){
     Clinic_t *clinicPtr = &clinic;
     createClinic(clinicPtr);
     
-    int check=1;
+    int check=0;
     int choice1=0;
     char selection1[256];
 
