@@ -441,7 +441,8 @@ void compression(){
             huffmanDecoding();
             break;
             case 3:
-            exit(0);
+            choice = 3;
+	    break;
             default:
             printf("Enter a valid option\n");
         }
