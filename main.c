@@ -33,57 +33,53 @@ int main(void){
     loginmenu();*/
 
 /* need a return from login menu to write a if function to go to the next menu*/
-    printMenu1();
-    printf("Enter your choice>");
-    scanf("%s",selection1);/*reads the input stream and stores it in selection*/
-    choice1=atoi(selection1);
-            
-    while (choice1 > 7 || choice1 < 1 || check == 0){
-    
-        check=1;
-        printf("Invalid choice.");
+    do{
         printMenu1();
         printf("Enter your choice>");
         scanf("%s",selection1);/*reads the input stream and stores it in selection*/
         choice1=atoi(selection1);
-          
-    
+        switch (choice1) {
 
-    switch (choice1) {
-
-        case 1: 
-        /*Add function for the doctor*/
-            for_doctor(clinicPtr);
-        break;
+            case 1: 
+            /*Add function for the doctor*/
+                for_doctor(clinicPtr);
+            break;
                  
-        case 2: 
-        /* Add function for admin*/
-            for_staff(clinicPtr);
-        break;
+            case 2: 
+            /* Add function for admin*/
+                for_staff(clinicPtr);
+            break;
 
-        case 3:
-        /* Save to database*/
-        break; 
+            case 3:
+            /* Save to database*/
+            break; 
 
-        case 4:
-        /* read from database*/
-        break; 
+            case 4:
+            /* read from database*/
+            break; 
 
-        case 5:
-        /* compress the file*/
-        compression();
-        break; 
+            case 5:
+            /* compress the file*/
+                compression();
+            break; 
 
-        case 6:
-        /* Encrypt the file*/
-            loginMenu();
+            case 6:
+            /* Encrypt the file*/
+                loginMenu();
             break; 
             
-        case 7:
-        /* decrypt the file*/
-         break; 
-        }
-    }
+            case 7:
+            /* decrypt the file*/
+            break; 
+
+            case 8:
+            exit(0);
+            default:
+                check=1;
+                printf("Invalid choice.");
+            break;
+            }
+    }while (choice1 < 7 || choice1 > 1 || check == 0);
     
             
         return 1;
