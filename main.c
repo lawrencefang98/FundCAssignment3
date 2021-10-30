@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <encryption.h>
+#include "encryption.h"
 #include "dataManipulation.h"
 #include "compression.h"
+#include "login.h"
 
 
 /**************** Function prototypes *******************/
@@ -11,8 +12,9 @@
 void printMenu1(void);
 void printdoctor(void);
 void printstaff(void);
-void for_doctor(/*items to return*/)
-void for_staff(/*items to return*/)
+void for_doctor(Clinic_t *clinicPtr);
+void for_staff(Clinic_t *clinicPtr);
+void loginMenu();
 /********************************************************************************
 Main1
 *******************************************************************************/
@@ -36,7 +38,7 @@ int main(void){
     scanf("%s",selection1);/*reads the input stream and stores it in selection*/
     choice1=atoi(selection1);
             
-    while (choice>6|| choice1<1 || check==0){
+    while (choice1 > 7 || choice1 < 1 || check == 0){
     
         check=1;
         printf("Invalid choice.");
@@ -45,18 +47,18 @@ int main(void){
         scanf("%s",selection1);/*reads the input stream and stores it in selection*/
         choice1=atoi(selection1);
           
-      }
+    
 
     switch (choice1) {
 
         case 1: 
         /*Add function for the doctor*/
-            for_doctor();
+            for_doctor(clinicPtr);
         break;
                  
         case 2: 
         /* Add function for admin*/
-            for_admin();
+            for_staff(clinicPtr);
         break;
 
         case 3:
@@ -80,9 +82,11 @@ int main(void){
         case 7:
         /* decrypt the file*/
          break; 
-           }
+        }
+    }
+    
             
-                return 1;
+        return 1;
 }
 
 
@@ -118,18 +122,17 @@ void printstaff(){
          "8. Edit Admin Staff Title\n"           
          "9. View all doctor details\n"
          "10. View all staff details\n"
-         "11. Return to Main Menu\n";
+         "11. Return to Main Menu\n");
     
 }
 
 
-void for_doctor(){/*items to return*/
+void for_doctor(Clinic_t *clinicPtr){/*items to return*/
 
     char userinput1[256];
     int select1=0;
-    int pcount=0;
     int checkp=0;
-    
+    char temp;
     
     printdoctor(); 
 
@@ -164,22 +167,23 @@ void for_doctor(){/*items to return*/
     }
 }
 
-void for_staff(/*items to return*/){
+void for_staff(Clinic_t *clinicPtr){
 
     
     
     
-    printstaff(); 
-
+    printstaff();
+    char userinput2[2]; 
+    int select2;
+    int checks=0;
     printf("Enter your choice>");
-    scanf("%s",userinput2);
+    scanf("%s", userinput2);
     select2=atoi(userinput2);
 
 
     while (select2>10 || select2<1 || checks==0){
     checks=1;
     printf("Invalid choice.");
-    printpatient();
     printf("Enter your choice>");
     scanf("%s",userinput2);
     select2=atoi(userinput2);
