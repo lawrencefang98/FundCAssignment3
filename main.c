@@ -18,11 +18,10 @@ Main1
 *******************************************************************************/
 int main(void){ 
 
-    struct User *userListcount
-    struct patientInfo *patientListcount
-    struct doctor *doctorListcount
-    struct adminstaff *adminListcount
-
+    Clinic_t clinic;
+    Clinic_t *clinicPtr = &clinic;
+    createClinic(clinicPtr);
+    
     int check=1;
     int choice1=0;
     char selection1[256];
@@ -52,10 +51,12 @@ int main(void){
 
         case 1: 
         /*Add function for the doctor*/
+            for_doctor();
         break;
                  
         case 2: 
         /* Add function for admin*/
+            for_admin();
         break;
 
         case 3:
@@ -150,35 +151,27 @@ void for_doctor(){/*items to return*/
     switch (select1){
 
     case 1:
-    
-    /*create user*/
-    
-
-    else{
-
-        printf("Patient List is full"); 
-    }
-    
-    break;
+        createPatient(clinicPtr);
+    break; 
             
     case 2:
-
+        searchPatient(clinicPtr);
     break;
     
     case 3:
-
+        displayPatientList(clinicPtr);
     break;
-
+        
     case 4:
-
+        
     break;
 
     case 5:
-
+        
     break;
    
     case 6:
-
+        
     break;
     }
 }
@@ -208,36 +201,44 @@ void for_staff(/*items to return*/){
     switch (select2){
 
     case 1:
-
+        createUser(clinicPtr);
     break;
 
     case 2:
-
+        editUser(clinicPtr);
     break;
     
     case 3:
-
+        deleteLastUser(clinicPtr);
     break;
 
     case 4:
-
+        searchUser(clinicPtr);
     break;
 
     case 5:
-
+        displayUserList(clinicPtr);
     break;
    
     case 6:
-
+        createDoctor(clinicPtr);
     break;
 
     case 7:
-
+        createAdminStaff(clinicPtr);
     break;
-
+        
     case 8:
-
+        editAdminStaffTitle(clinicPtr);
     break;
+            
+    case 9:
+        displayDoctorList(clinicPtr);
+    break;
+            
+    case 10:
+        displayAdminStaffList(clinicPtr);
+    break;           
     }
 }
 
