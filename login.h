@@ -1,4 +1,3 @@
-
 /******************************************************************************
  *                               HEADER GUARDS                                *
  ******************************************************************************/
@@ -303,7 +302,7 @@ void saveUser(user_t accounts[], int* total_p)
 int checkCharNum(const char username[])
 {
     int i = 0;
-    int j;
+    int j = 0;
 
     /*for(i = 0; i <= ID_LEN + 1; ++i)*/
     while(i <= ID_LEN + 1)
@@ -328,30 +327,24 @@ int checkCharNum(const char username[])
 int checkChar(const char password[])
 {
     int i;
-    int j = 0;
 
     /* String only contains alphanumeric characters */
     for(i = 0; i <= MAX_PASS_LEN + 1; i++)
     {
         char ch = password[i];
 
-        if ((ch >= 'A' && ch <= 'Z') ||
-            (ch >= 'a' && ch <= 'z') ||
-            (ch >= '0' && ch <= '9'))
+        if ((ch <= 'A' && ch >= 'Z') ||
+            (ch <= 'a' && ch >= 'z') ||
+            (ch <= '0' && ch >= '9'))
         {
-            j++;
+            return 0;
         }
 
         else
-            j = 0;
+           return 1;
 
     }
 
-    if(j > 0)
-        return 1;
-
-    else
-        return 0;
 }
 
 
