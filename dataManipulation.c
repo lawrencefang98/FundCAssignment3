@@ -4,7 +4,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-
+void createClinic(Clinic_t *clinic) {
+    clinic->userListCount = 0;
+    clinic->adminStaffCount = 0;
+    clinic->doctorListCount = 0;
+    clinic->patientListCount = 0;
+}
 
 /**
  * createUser
@@ -45,8 +50,31 @@ void createUser(Clinic_t *clinic) {
 
     newUserPtr->phoneNo = getPhoneNo();
 
-    printf("Please enter user's gender (M/F):");
-    scanf(" %c", &newUserPtr->gender);
+    while (TRUE) {
+        printf("Please select user's gender\n");
+        printf("1. Male\n");
+        printf("2. Female\n");
+        printf("Select 1 or 2:");
+        char genderSelection;
+        scanf(" %c", &genderSelection);
+        int invalidOption = 0;
+        switch (genderSelection) {
+            case '1':
+                newUserPtr->gender = 'M';
+                break;
+            case '2':
+                newUserPtr->gender = 'F';
+                break;
+            default:
+                invalidOption = 1;
+                printf("Invalid option. Try again!\n");
+                break;
+        }
+        if (invalidOption) {
+            continue;
+        }
+        break;
+    }
 
     newUserPtr->userID = 1000 + clinic->userListCount;
     
@@ -59,14 +87,30 @@ void createUser(Clinic_t *clinic) {
 }
 
 /**
- * deleteUser
- * Takes input for user information and deletes user from clinic
+ * deleteLastUser
+ * Prints out information of user to be deleted and asks for confirmation
  *@param Clinic_t clinic: pointer to clinic
  * 
 **/
-void deleteUser(Clinic_t clinic) {
-
+void deleteLastUser(Clinic_t *clinic) {
+    if (clinic->userListCount == 0) {
+        printf("No users in system\n");
+        return;
+    }
+    printf("User to be deleted");
+    userToString(clinic->userList[clinic->userListCount - 1]);
+    char deleteChoice;
+    printf("Do you wish to delete this user? (Y/N)");
+    scanf(" %c", &deleteChoice);
+    if (deleteChoice == 'y' || deleteChoice == 'Y') {
+        clinic->userListCount -= 1;
+        printf("User deleted.\n");
+    }
+    else {
+        printf("User not deleted.\n");
+    }
 }
+
 /**
  * searchUser
  * Takes input for user information and looks for a user if it exists and displays user info
@@ -178,61 +222,43 @@ void userToString(User_t userToDisplay) {
     printf("Gender: %c\n", userToDisplay.gender);
 }
 
-
 /**
- * getDate()
- * Function takes user input and returns a date
- * Checks that dates are valid (1<DD<31, 1<MM<12, 1900<YYYY<2021)
- * @return Date_t date from user input in a valid range
-**/
-
-Date_t getDate() {
-    Date_t returnedDate;
-    while (1) {
-        printf("Enter Date: day>");
-        scanf("%i", &returnedDate.day);
-        if (returnedDate.day < 1 || returnedDate.day > 31) {
-            printf("Invalid day. ");
+ * getUser
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
+User_t getUser(Clinic_t *clinic) {
+    printf("Please enter user's ID:");
+        int idInput;
+        scanf("%i", &idInput);
+        int i;
+        for (i=0; i<clinic->userListCount; i++) {
+            if (clinic->userList[i].userID == idInput) {
+                return clinic->userList[i];
+            }
         }
-        else {
-            break;
-        }
-    }
-    while (1) {
-        printf("Enter Date: month>");
-        scanf("%i", &returnedDate.month);
-        if (returnedDate.month < 1 || returnedDate.month > 12) {
-            printf("Invalid month. ");
-        }
-        else {
-            break;
-        }
-    }
-    while (1) {
-        printf("Enter Date: year>");
-        scanf("%i", &returnedDate.year);
-        if (returnedDate.year < 1900 || returnedDate.year > 2021) {
-            printf("Invalid year. ");
-        }
-        else {
-            break;
-        }
-    }
-    return returnedDate;
+    Date_t emptyDate = {0,0,0};    
+    User_t noUser = {0,"","", emptyDate, "", 0,"",'0'};
+    return noUser;    
 }
 
-/**
- * printDate
- * Function takes a Date and prints it out in string format
- * @param Date_t date to covert to string in format dd/mm/yyyy
-**/
-void printDate(Date_t date) {
-    printf("%i", date.day);
-    printf("/");
-    printf("%i", date.month);
-    printf("/");
-    printf("%i", date.year);
-    printf("\n");
+void displayUserList(Clinic_t *clinic) {
+    if (clinic->userListCount == 0) {
+        printf("No users in system.\n");
+        return;
+    }
+    int i;
+    for (i=0; i < clinic->userListCount; i++) {
+        User_t userToDisplay = clinic->userList[i];
+        printf("%i,", userToDisplay.userID);
+        printf("%s,", userToDisplay.firstName);
+        printf("%s,", userToDisplay.lastName);
+        printf("%i-%i-%i,", userToDisplay.dateOfBirth.day, userToDisplay.dateOfBirth.month, userToDisplay.dateOfBirth.year);
+        printf("%s,", userToDisplay.email);
+        printf("%i,", userToDisplay.phoneNo);
+        printf("%s,", userToDisplay.address);
+        printf("%c\n", userToDisplay.gender);
+    }
 }
 
 /**
@@ -263,25 +289,10 @@ int getPhoneNo() {
 }
 
 /**
- * getUser
+ * createDoctor
  * Function gets user input and checks if there is an associated user
  * @return user_t user, returns blank user if not found
  **/
-User_t getUser(Clinic_t *clinic) {
-    printf("Please enter user's ID:");
-        int idInput;
-        scanf("%i", &idInput);
-        int i;
-        for (i=0; i<clinic->userListCount; i++) {
-            if (clinic->userList[i].userID == idInput) {
-                return clinic->userList[i];
-            }
-        }
-    Date_t emptyDate = {0,0,0};    
-    User_t noUser = {0,"","", emptyDate, "", 0,"",'0'};
-    return noUser;    
-}
-
 void createDoctor(Clinic_t *clinic) {
     if (clinic->doctorListCount == MAX_DOCTORS) {
         printf("Maximum amount of doctors reached\n");
@@ -315,8 +326,11 @@ void createDoctor(Clinic_t *clinic) {
         break;
     }
 }
-void deleteDoctor(Clinic_t *clinic);
-
+/**
+ * createDoctor
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
 void createAdminStaff(Clinic_t *clinic) {
     if (clinic->adminStaffCount == MAX_ADMIN_STAFF) {
         printf("Maximum amount of admin staff reached\n");
@@ -355,8 +369,11 @@ void createAdminStaff(Clinic_t *clinic) {
     }
 }
 
-void deleteAdminStaff(Clinic_t *clinic);
-
+/**
+ * createDoctor
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
 void editAdminStaffTitle(Clinic_t *clinic) {
     while (TRUE) {
         AdminStaff_t adminStaff = getAdminStaff(clinic);
@@ -364,26 +381,20 @@ void editAdminStaffTitle(Clinic_t *clinic) {
             printf("Invalid staff ID");
             continue;       
         }
-    AdminStaff_t *newAdminStaffPtr = &clinic->adminStaffList[clinic->adminStaffCount];
+        AdminStaff_t *AdminStaffPtr = &clinic->adminStaffList[clinic->adminStaffCount];
+        printf("Please enter admin staff's job title:");
+        char jobTitleInput[MAX_JOB_TITLE_LENGTH];
+        scanf(" %[^\n]%*c", jobTitleInput);
+        strcpy(AdminStaffPtr->jobTitle, jobTitleInput);
+        break;
+    }
 }
 
-void doctorToString(Doctor_t doctorToDisplay) {
-    printf("Doctor Information for userID: %i\n", doctorToDisplay.userId);
-    printf("Doctor ID: %i\n", doctorToDisplay.doctorId);
-    printf("Start date:");
-    printDate(doctorToDisplay.startDate);
-    printf("\n");
-}
-
-void adminStaffToString(AdminStaff_t adminStaffToDisplay) {
-    printf("Admin Staff Information for userID: %i\n",adminStaffToDisplay.userId);
-    printf("Staff ID: %i\n", adminStaffToDisplay.staffId);
-    printf("Job Title: %s\n", adminStaffToDisplay.jobTitle);
-    printf("Start date:");
-    printDate(adminStaffToDisplay.startDate);
-    printf("\n");
-}
-
+/**
+ * createDoctor
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
 AdminStaff_t getAdminStaff(Clinic_t *clinic) {
     printf("Please enter admin staff ID:");
         int idInput;
@@ -397,6 +408,61 @@ AdminStaff_t getAdminStaff(Clinic_t *clinic) {
     Date_t emptyDate = {0,0,0};    
     AdminStaff_t noUser = {0, 0,"", emptyDate};
     return noUser;    
+}
+
+/**
+ * createDoctor
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
+void doctorToString(Doctor_t doctorToDisplay) {
+    printf("Doctor Information for userID: %i\n", doctorToDisplay.userId);
+    printf("Doctor ID: %i\n", doctorToDisplay.doctorId);
+    printf("Start date:");
+    printDate(doctorToDisplay.startDate);
+    printf("\n");
+}
+
+/**
+ * createDoctor
+ * Function gets user input and checks if there is an associated user
+ * @return user_t user, returns blank user if not found
+ **/
+void adminStaffToString(AdminStaff_t adminStaffToDisplay) {
+    printf("Admin Staff Information for userID: %i\n",adminStaffToDisplay.userId);
+    printf("Staff ID: %i\n", adminStaffToDisplay.staffId);
+    printf("Job Title: %s\n", adminStaffToDisplay.jobTitle);
+    printf("Start date:");
+    printDate(adminStaffToDisplay.startDate);
+    printf("\n");
+}
+
+void displayDoctorList(Clinic_t *clinic) {
+    if (clinic->doctorListCount == 0) {
+        printf("No doctors in system.\n");
+        return;
+    }
+    int i;
+    for (i=0; i < clinic->doctorListCount; i++) {
+        Doctor_t doctorToDisplay = clinic->doctorList[i];
+        printf("%i,", doctorToDisplay.userId);
+        printf("%i,", doctorToDisplay.doctorId);
+        printf("%i-%i-%i\n", doctorToDisplay.startDate.day, doctorToDisplay.startDate.month, doctorToDisplay.startDate.year);
+    }
+}
+
+void displayAdminStaffList(Clinic_t *clinic) {
+    if (clinic->adminStaffList == 0) {
+        printf("No staff in system.\n");
+        return;
+    }
+    int i;
+    for (i=0; i < clinic->adminStaffCount; i++) {
+        AdminStaff_t staffToDisplay = clinic->adminStaffList[i];
+        printf("%i,", staffToDisplay.userId);
+        printf("%s,",  staffToDisplay.jobTitle);
+        printf("%i-%i-%i\n", staffToDisplay.startDate.day, staffToDisplay.startDate.month, staffToDisplay.startDate.year);
+    }
 }
 
 
@@ -414,6 +480,10 @@ void createPatient(Clinic_t *clinic) {
         printf("No users in system\n");  
         return;
     }
+    else if (clinic->doctorListCount == 0) {
+        printf("No doctors in system\n");
+        return;
+    }
     
     PatientInfo_t *newPatientPtr = &clinic->patientList[clinic->patientListCount];
     while (TRUE) {
@@ -424,6 +494,7 @@ void createPatient(Clinic_t *clinic) {
             continue;
         }
         else {
+            newPatientPtr->userID = patientUser.userID;
             while (TRUE) {
                 printf("Possible patient's blood type\n");
                 printf("1. AB+\n");
@@ -475,14 +546,100 @@ void createPatient(Clinic_t *clinic) {
             }
 
             printf("Assign primary doctor to patient\n");
-            
-            printf("Enter doctor's ID:");
-
+            while (TRUE) {
+                printf("Select a doctor to assign\n");
+                int i;
+                for (i=0; i < clinic->doctorListCount; i++) {
+                    printf("%i. Doctor id: %i\n", i, clinic->doctorList[i].doctorId);
+                }
+                char doctorSelected;
+                printf("Enter selection:");
+                scanf(" %c", &doctorSelected);
+                int doctorOption = atoi(&doctorSelected);
+                if (doctorSelected > 0 || doctorSelected < clinic->doctorListCount ) {
+                    newPatientPtr->primaryDoctorID = clinic->doctorList[doctorOption].doctorId;
+                    break;
+                }
+                else {
+                    printf("Invalid choice. Try again.\n");
+                }
+            }
         }
         break;
     }
+    
+    printf("New Patient Information\n");
+    patientInfoToString(clinic->patientList[clinic->patientListCount]);
+    clinic->patientListCount += 1;
 }
 
-void deletePatient(Clinic_t *clinic);
-PatientInfo_t searchPatient(Clinic_t *clinic);
-void editPatientInfo(Clinic_t *clinic);
+
+void patientInfoToString(PatientInfo_t patientInfoToDisplay) {
+    printf("Patient User Id: %i\n", patientInfoToDisplay.userID);
+    printf("Patient Blood Type: %s\n", patientInfoToDisplay.bloodType);
+    printf("Patient primary doctor: %i\n", patientInfoToDisplay.primaryDoctorID);
+}
+
+void displayPatientList(Clinic_t *clinic) {
+    
+}
+
+
+
+
+
+/**
+ * getDate()
+ * Function takes user input and returns a date
+ * Checks that dates are valid (1<DD<31, 1<MM<12, 1900<YYYY<2021)
+ * @return Date_t date from user input in a valid range
+**/
+
+Date_t getDate() {
+    Date_t returnedDate;
+    while (TRUE) {
+        printf("Enter Date: day>");
+        scanf("%i", &returnedDate.day);
+        if (returnedDate.day < 1 || returnedDate.day > 31) {
+            printf("Invalid day. ");
+        }
+        else {
+            break;
+        }
+    }
+    while (TRUE) {
+        printf("Enter Date: month>");
+        scanf("%i", &returnedDate.month);
+        if (returnedDate.month < 1 || returnedDate.month > 12) {
+            printf("Invalid month. ");
+        }
+        else {
+            break;
+        }
+    }
+    while (TRUE) {
+        printf("Enter Date: year>");
+        scanf("%i", &returnedDate.year);
+        if (returnedDate.year < 1900 || returnedDate.year > 2021) {
+            printf("Invalid year. ");
+        }
+        else {
+            break;
+        }
+    }
+    return returnedDate;
+}
+
+/**
+ * printDate
+ * Function takes a Date and prints it out in string format
+ * @param Date_t date to covert to string in format dd/mm/yyyy
+**/
+void printDate(Date_t date) {
+    printf("%02i", date.day);
+    printf("/");
+    printf("%02i", date.month);
+    printf("/");
+    printf("%i", date.year);
+    printf("\n");
+}

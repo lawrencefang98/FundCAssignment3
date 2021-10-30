@@ -66,9 +66,7 @@
     **/
     struct MedicalRecord {
         Date_t dateOfEntry;
-        Doctor_t doctorVisited;
         char description[MAX_RECORD_DESCRIPTION_LENGTH];
-        struct MedicalRecord* next;
     };
     typedef struct MedicalRecord MedicalRecord_t;
 
@@ -77,11 +75,9 @@
      * Stores information related to a patient's medical information
     **/
     struct PatientInfo {
-        User_t patientUser;
+        int userID;
         char bloodType[3];
         int primaryDoctorID;
-        MedicalRecord_t*  medicalRecordHistory;
-
     };
     typedef struct PatientInfo PatientInfo_t;
 
@@ -114,47 +110,36 @@
     };
     typedef struct Clinic Clinic_t;
     /*Constructor for Clinic*/
+    void createClinic(Clinic_t *clinic);
 
     /* FUNCTION DEFINITIONS */
 
     /*User Related Functions*/
     void createUser(Clinic_t *clinic);
-    void deletelastUser(Clinic_t *clinic);
+    void deleteLastUser(Clinic_t *clinic);
     void searchUser(Clinic_t *clinic);
     void editUser(Clinic_t *clinic);
+    void userToString(User_t userToDisplay);
+    User_t getUser(Clinic_t *clinic);
+    void displayUserList(Clinic_t *clinic);
+    int getPhoneNo();
 
     /*Staff Related Functions*/
     void createDoctor(Clinic_t *clinic);
-    void deleteDoctor(Clinic_t *clinic);
     void createAdminStaff(Clinic_t *clinic);
-    void deleteAdminStaff(Clinic_t *clinic);
     void editAdminStaffTitle(Clinic_t *clinic);
+    AdminStaff_t getAdminStaff(Clinic_t *clinic);
+    void doctorToString(Doctor_t doctorToDisplay);
+    void adminStaffToString(AdminStaff_t adminStaffToDisplay);
+    void displayDoctorList(Clinic_t *clinic);
+    void displayAdminStaffList(Clinic_t *clinic);
     
     /*Patient Related Functions*/
     void createPatient(Clinic_t *clinic);
-    void assignDoctor(Clinic_t *clinic);
-    void deletePatientInfo(Clinic_t *clinic);
-    PatientInfo_t searchPatientInfo(Clinic_t *clinic);
-    void editPatientInfo(Clinic_t *clinic);
-
-
-    /*Medical Record Related Functions*/
-    MedicalRecord_t createMedicalRecord(PatientInfo_t patient);
-    void deleteMedicalRecord(MedicalRecord_t medicalRecordToDelete);
-    void searchMedicalRecord(int searchOption);
-
-
-
-    /*Getter Functions*/
-    Date_t getDate();
-    int getPhoneNo();
-    User_t getUser(Clinic_t *clinic);
-
-    /*Print Functions*/
-    void printDate(Date_t date);
-    void userToString(User_t userToDisplay);
     void patientInfoToString(PatientInfo_t patientInfoToDisplay);
-    void medicalRecordToString(MedicalRecord_t medicalRecordToDisplay);
-    void adminStaffToString(AdminStaff_t adminStaffToDisplay);
-    void doctorToString(Doctor_t doctorToDisplay);
-    void medicalRecordToString(MedicalRecord_t medicalRecordToDisplay);
+    void displayPatientList(Clinic_t *clinic);
+
+
+    /*Date Functions*/
+    Date_t getDate();
+    void printDate(Date_t date);
