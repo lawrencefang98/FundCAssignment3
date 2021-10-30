@@ -685,6 +685,7 @@ void displayDoctorList(Clinic_t *clinic)
         return;
     }
     int i;
+    printf("User Id | Doctor Id | Doctor Start Date\n");
     for (i = 0; i < clinic->doctorListCount; i++)
     {
         Doctor_t doctorToDisplay = clinic->doctorList[i];
@@ -707,6 +708,7 @@ void displayAdminStaffList(Clinic_t *clinic)
         return;
     }
     int i;
+    printf("UserID | Job Title | Start Date\n");
     for (i = 0; i < clinic->adminStaffCount; i++)
     {
         AdminStaff_t staffToDisplay = clinic->adminStaffList[i];
