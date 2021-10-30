@@ -170,13 +170,13 @@ int deletefile()
 *******************************************************************************/
 int mergefile()
 {
-   /* Open three files to be merged */
+   /* Open four files to be merged */
    FILE *fp1 = fopen("Adminstaff.txt", "r");
    FILE *fp2 = fopen("Patients.txt", "r");
    FILE *fp3 = fopen("Doctor.txt", "r");
    FILE *fp4 = fopen("Users.txt", "r");
   
-   /* Open file to store the result */
+   /* Open files to store the result */
    FILE *fp5 = fopen("Clinic.txt", "w");
    char c;
   
@@ -186,22 +186,23 @@ int mergefile()
          return 1;
    }
   
-   /* Copy contents of first file to file4.txt */
+   /* Copy contents of first file to file5.txt */
    while ((c = fgetc(fp1)) != EOF)
       fputc(c, fp5);
   
-   /* Copy contents of second file to file4.txt */
+   /* Copy contents of second file to file5.txt */
    while ((c = fgetc(fp2)) != EOF)
       fputc(c, fp5);
       
-   /* Copy contents of third file to file4.txt */
+   /* Copy contents of third file to file5.txt */
    while ((c = fgetc(fp3)) != EOF)
       fputc(c, fp5);
-  
+	
+  /* Copy contents of fourth file to file5.txt */
   while ((c = fgetc(fp4)) != EOF)
       fputc(c, fp5);
 
-   printf("Merged Adminstaff.txt, Patient.txt and Doctor.txt, Users.txt into Clinic.txt");
+   printf("Merged Adminstaff.txt, Patient.txt, Doctor.txt and Users.txt into Clinic.txt");
   
    fclose(fp1);
    fclose(fp2);
