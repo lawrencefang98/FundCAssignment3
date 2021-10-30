@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <encryption.h>
 #include "dataManipulation.h"
+#include "compression.h"
 
 
 /**************** Function prototypes *******************/
@@ -66,7 +67,7 @@ int main(void){
         break; 
 
         case 5:
-        /*compress the file*/
+        compression();
         break; 
 
         case 6:
