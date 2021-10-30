@@ -1,3 +1,7 @@
+#ifndef CompressionGuard
+#define CompressionGuard
+
+
 #include <stdio.h>/* fopen,printf,scanf,fclose,fwrite,fgetc,fseek,fread*/
 #include <stdlib.h>/*malloc,exit*/
 #include <string.h>/*strlen*/
@@ -445,3 +449,4 @@ void compression(){
     while(choice != 3);
 }
 
+#endif /*CompressionGuard*/
