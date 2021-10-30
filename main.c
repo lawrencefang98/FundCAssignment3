@@ -98,12 +98,14 @@ void printMenu1(void){
     printf("\n\n"
          "1. For Doctor\n" 
          "2. For Admin\n"
-         "3. Save to Database\n"
-         "4. Read from Database\n"
-         "5. Compress the file\n"
-         "6. Encrypt the file\n"
-         "7. Decyrpt the file\n"
-         "8. Exit the program\n");
+         "3. Save patient Database\n"
+         "4. Save doctor Database\n" 
+         "5. Save admin Database\n" 
+         "6. Read from Database\n"
+         "7. Compress the file\n"
+         "8. Encrypt the file\n"
+         "9. Decyrpt the file\n"
+         "10. Exit the program\n");
 }
 
 void printdoctor(){
