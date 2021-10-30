@@ -138,7 +138,7 @@ void for_doctor(){/*items to return*/
     scanf("%s",userinput1);
     select1=atoi(userinput1);
 
-    while (select1>7 || select1<1 || checkp==0){
+    while (select1>3 || select1<1 || checkp==0){
     checkp=1;
     printf("Invalid choice.");
     printdoctor();
@@ -161,18 +161,6 @@ void for_doctor(){/*items to return*/
     case 3:
         displayPatientList(clinicPtr);
     break;
-        
-    case 4:
-        
-    break;
-
-    case 5:
-        
-    break;
-   
-    case 6:
-        
-    break;
     }
 }
 
@@ -188,7 +176,7 @@ void for_staff(/*items to return*/){
     select2=atoi(userinput2);
 
 
-    while (select2>9 || select2<1 || checks==0){
+    while (select2>10 || select2<1 || checks==0){
     checks=1;
     printf("Invalid choice.");
     printpatient();
