@@ -2,8 +2,8 @@
  *                               HEADER GUARDS                                *
  ******************************************************************************/
 
-#ifndef TEST_LOGIN_H
-#define TEST_LOGIN_H
+#ifndef FUNDCASSIGNMENT3_LOGIN_H 
+#define FUNDCASSIGNMENT3_LOGIN_H
 
 /******************************************************************************
  *                               HEADER FILES                                 *
@@ -284,17 +284,14 @@ void saveUser(user_t accounts[], int* total_p)
 
     if(file_p != NULL)
     {
-        int i = 0;
+        int i = *total_p - 1;
 
-        while(i <= *total_p - 1)
-        {
-            fprintf(file_p, "%s %s\n",
-                    accounts[i].username,
-                    accounts[i].password);
-            i++;
-        }
+        /*while(i <= *total_p - 1)*/
+
+        fprintf(file_p, "%s %s\n",
+                accounts[i].username,
+                accounts[i].password);
     }
-
     fclose(file_p);
 }
 
@@ -360,7 +357,6 @@ int validCred(const char credentials[])
             }
         }
     }
-
     fclose(file_p);
 
     return i;
@@ -383,6 +379,13 @@ void loginUser(int* total_p)
     scanf("%c", &space); /* Reads all text (including spaces) in a line */
     scanf("%[^\n]", login.password);
 
+    while(validCred(login.username) == 1 && validCred(login.password) == 1)
+    {
+        printf("\n\n                LOGIN SUCCESSFUL                \n\n");
+
+        cipherMenu();
+    }
+
     if(total_p == 0)
     {
         printf("\nERROR | No accounts exist.\n");
@@ -391,68 +394,60 @@ void loginUser(int* total_p)
 
     else
     {
-        if(validCred(login.username) == 1 && validCred(login.password) == 1)
+        while(validCred(login.username) == 0 ||
+              validCred(login.password) == 0)
         {
-            printf("\n\n                LOGIN SUCCESSFUL                \n\n");
-
-            cipherMenu();
+            printf("\n          Invalid username or password.          \n");
+            break;
         }
 
-
         /* Debug: User will be prompted to enter password with no spaces */
-        else if(strstr(login.password, " ") != NULL)
+        if(strstr(login.password, " ") != NULL)
         {
             printf("\nERROR | Your password must not include spaces.\n");
         }
 
-        else if(checkNum(login.username) == 0)
+        if(checkNum(login.username) == 0)
         {
-            printf("\nERROR | Your ID must only include numeric characters.\n");
+            printf("\nERROR | Your ID must only = numeric characters.\n");
         }
 
-        /* Debug: User will be prompted to enter username with no spaces */
-        else if(strstr(login.username, " ") != NULL)
+            /* Debug: User will be prompted to enter username with no spaces */
+        if(strstr(login.username, " ") != NULL)
         {
             printf("\nERROR | Your ID must not include spaces.\n");
         }
 
-        else if(strcmp(login.username, "\0") == 0)
+        if(strcmp(login.username, "\0") == 0)
         {
             printf("\nERROR | Empty user ID.\n");
         }
 
-        else if(strlen(login.username) < ID_LEN)
+        if(strlen(login.username) < ID_LEN)
         {
-            printf("\nERROR | User ID must not be less than 8 characters.\n");
+            printf("\nERROR | User ID must not be < 8 characters.\n");
         }
 
-        else if(strlen(login.username) > ID_LEN)
+        if(strlen(login.username) > ID_LEN)
         {
             printf("\nERROR | User ID must not exceed 8 characters.\n");
         }
 
-        else if(strcmp(login.password, "\0") == 0)
+        if(strcmp(login.password, "\0") == 0)
         {
             printf("\nERROR | Empty password.\n");
         }
 
-        else if(strlen(login.password) < MIN_PASS_LEN)
+        if(strlen(login.password) < MIN_PASS_LEN)
         {
             printf("\nERROR | Password must be at least 8 characters\n");
         }
 
-        else if(strlen(login.password) > MAX_PASS_LEN)
+        if(strlen(login.password) > MAX_PASS_LEN)
         {
             printf("\nERROR | Password must not exceed 20 chars.\n");
-        }
-
-        else if(validCred(login.username) == 0 ||
-                validCred(login.password) == 0)
-        {
-            printf("\nERROR | Incorrect username or password.\n");
-            cipherMenu();
         }
     }
 }
 
-#endif /* TEST_LOGIN_H */
+#endif /* FUNDCASSIGNMENT3_LOGIN_H */
