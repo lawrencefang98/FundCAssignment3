@@ -50,7 +50,6 @@ void printMenu();
 void loginUser(int* total_p);
 void addUser(user_t accounts[], int* total_p);
 void saveUser(user_t accounts[], int* total_p);
-void deleteUser(user_t accounts[], int* total_p);
 
 /* Validity Check */
 int validCred(const char credentials[]);
@@ -168,7 +167,7 @@ void addUser(user_t accounts[], int* total_p)
         if(validCred(accounts[i].username) > 1)
         {
             printf("ERROR | Account already exists.");
-            exit(EXIT_FAILURE);
+            loginMenu();
         }
 
         /* Debug: Username may only include numeric characters */
@@ -253,9 +252,7 @@ void addUser(user_t accounts[], int* total_p)
 
 void saveUser(user_t accounts[], int* total_p)
 {
-    FILE * file_p = fopen(LOGIN_DB,"w");
-    rewind(file_p);
-    file_p = fopen(LOGIN_DB,"a");
+    FILE * file_p = fopen(LOGIN_DB,"a");
 
     if(file_p != NULL)
     {
@@ -266,17 +263,16 @@ void saveUser(user_t accounts[], int* total_p)
             fprintf(file_p, "%-8s %-20s\n",
                     accounts[i].username,
                     accounts[i].password);
-
-            break;
+            i++;
         }
-
-        fclose(file_p);
     }
 
     else
     {
-        printf("ERROR | Read error.");
+        printf("ERROR | File does not exist.");
     }
+
+    fclose(file_p);
 }
 
 
@@ -333,14 +329,11 @@ int checkPeriod(const char string[])
 /* Read existing account information from file */
 int validCred(const char credentials[])
 {
-    FILE *file_p = file_p = fopen(LOGIN_DB, "r");
+    FILE *file_p = fopen(LOGIN_DB, "r");
 
     int i = 0; /* Counter variable for substring occurrences */
 
-    char word[MAX_PASS_LEN + 1] = {'\0'};
     char text_b[MAX_FILE_SZ + 1] = {'\0'}; /* Buffer for text file contents */
-
-    strcpy(word, credentials);
 
     if (file_p == NULL)
     {
@@ -356,7 +349,7 @@ int validCred(const char credentials[])
         {
             char* ptr = text_b;
 
-            while((ptr = (strstr(ptr,word))) != NULL)
+            while((ptr = (strstr(ptr,credentials))) != NULL)
             {
                 i++;
                 ++ptr;
