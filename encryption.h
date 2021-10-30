@@ -1,9 +1,11 @@
+
+
 /******************************************************************************
  *                               HEADER GUARDS                                *
  ******************************************************************************/
 
-#ifndef FINAL_AT3_ENCRYPTION_H
-#define FINAL_AT3_ENCRYPTION_H
+#ifndef TEST_ENCRYPTION_H
+#define TEST_ENCRYPTION_H
 
 /******************************************************************************
  *                               HEADER FILES                                 *
@@ -52,14 +54,18 @@ void cipherMenu()
     printf("\nEnter your choice: ");
     scanf("%d", &choice);
 
-    printf("\nWARNING | Using an invalid key will corrupt the file.\n");
+    /*printf("\nWARNING | Using an invalid key will corrupt the file.\n");
     printf("\nEnter your key: ");
-    scanf("%s", key);
+    scanf("%s", key);*/
 
     while(1)
     {
         if(choice == 1)
         {
+            printf("\nWARNING | Using an invalid key will corrupt the file.\n");
+            printf("\nEnter your key: ");
+            scanf("%s", key);
+
             encryptMenu(input_b, output_b, key);
 
             cipherChoice();
@@ -69,6 +75,10 @@ void cipherMenu()
 
         else if(choice == 2)
         {
+            printf("\nWARNING | Using an invalid key will corrupt the file.\n");
+            printf("\nEnter your key: ");
+            scanf("%s", key);
+
             decryptMenu(input_b, output_b, key);
 
             cipherChoice();
@@ -127,7 +137,7 @@ void decryptMenu(char input_b[], char output_b[], char key[])
     printf("\nEnter the name of the existing ciphertext file: ");
     scanf("%s", in_file);
 
-    printf("\nEnter the name of the decrypted file: ");
+    printf("Enter the name of the decrypted file: ");
     scanf("%s", out_file);
     printf("\n");
 
@@ -146,7 +156,7 @@ char readFile(char filename[], char input_b[])
     if(file_p == NULL)
     {
         printf("File not found.\n");
-        exit(EXIT_FAILURE);
+        EXIT_FAILURE;
     }
 
     if(!feof(file_p))
@@ -193,7 +203,7 @@ void writeFile(char filename[], char input_b[], char output_b[])
     else
     {
         printf("ERROR | Read error.\n");
-        exit(EXIT_FAILURE);
+        EXIT_FAILURE;
     }
 
     fclose(file_p);
@@ -204,7 +214,7 @@ void xorEncDec(char input_b[], char output_b[], char key[])
     int i = 0;
 
     while (input_b[i] != '\0')
-     {
+    {
         for (i = 0; i < strlen(input_b); i++)
         {
             output_b[i] = input_b[i] ^ key[i % sizeof(*key)/sizeof(char)];
@@ -212,4 +222,4 @@ void xorEncDec(char input_b[], char output_b[], char key[])
     }
 }
 
-#endif /* FINAL_AT3_ENCRYPTION_H */
+#endif /* TEST_ENCRYPTION_H */
