@@ -45,7 +45,7 @@ struct minHeap* createMinHeap(int capacity){
     malloc(sizeof(struct minHeap));
     minPriorityHeap->currentSize=0;
     minPriorityHeap->capacity = capacity;
-    minPriorityHeap->array = (struct minNode **)malloc(minPriorityHeap->capacity
+    minPriorityHeap->array = (struct minNode**)malloc(minPriorityHeap->capacity
     * sizeof(struct minNode *));
     return minPriorityHeap;
 }
@@ -75,7 +75,7 @@ this function inserts a node in the min heap
 INPUT: struct minHeap *minPriorityHeap, struct minNode *minHeapNode 
 OUTPUT:
 */
-void insertInHeap(struct minHeap *minPriorityHeap, struct minNode *minHeapNode ){
+void insertInHeap(struct minHeap *minPriorityHeap,struct minNode *minHeapNode){
     minPriorityHeap->array[minPriorityHeap->currentSize] = minHeapNode;
     minPriorityHeap->currentSize++;
     orderHeap(minPriorityHeap);
@@ -92,7 +92,8 @@ int isOneSize(struct minHeap* minPriorityHeap){
     return 0;
 }
 /*
-this function extracts the two smallest nodes from the heap and combine them under an different node
+this function extracts the two smallest nodes from the heap and combine them under 
+an different node
 INPUT: struct minHeap* minPriorityHeap
 OUTPUT:struct minNode* 
 */
@@ -148,10 +149,12 @@ int isLeaf(struct minNode *node){
 }
 /*
 this function creates an huffman table based on the frequency of the characters
-INPUT: struct minNode *node,int arr[], int top,char huffmanTable[], char huffmanTableB[][30],int *counter2
+INPUT: struct minNode *node,int arr[], int top,char huffmanTable[], 
+char huffmanTableB[][30],int *counter2
 OUTPUT:
 */
-void table(struct minNode *node,int arr[], int top,char huffmanTable[], char huffmanTableB[][30],int *counter2){
+void table(struct minNode *node,int arr[], int top,char huffmanTable[], 
+char huffmanTableB[][30],int *counter2){
     if(node->left != NULL){
         arr[top] = 0;
         table(node->left,arr,top+1,huffmanTable,huffmanTableB,counter2);
@@ -199,10 +202,12 @@ void nodeCounterF(struct minNode *node,int arr[], int top,int *counter2){
 
 /*
 this function compressed a file
-INPUT:char huffmanTable[], char huffmanTableB[][30],struct minNode* tree,char filename[],char character[], int frequency[],int counter
+INPUT:char huffmanTable[], char huffmanTableB[][30],struct minNode* tree
+,char filename[],char character[], int frequency[],int counter
 OUTPUT:
 */
-void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree,char filename[],char character[], int frequency[],int counter){
+void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree
+,char filename[],char character[], int frequency[],int counter){
     char comFile[MAX_TABLE];
     printf("What would you like to name your compressed file:");
     scanf("%s",comFile);
@@ -217,7 +222,8 @@ void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree,c
     long i;
     int f;
     nodeCounterF(tree,arr,top, &nodeCounter);
-    while((c=fgetc(fp))){/*counts the number of total bits to be put in the compressed file*/
+    while((c=fgetc(fp))){
+        /*counts the number of total bits to be put in the compressed file*/
         if (c == EOF) break;
         for(i = 0; i < strlen(huffmanTable) ;i++){
             if(huffmanTable[i] == c){
@@ -225,9 +231,12 @@ void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree,c
             }
         }
     }
-    fwrite(&totalBits,sizeof(int),1,fp2);/*storing the number of bits into the header*/
-    fwrite(&counter, sizeof(int),1,fp2);/*storing the size of the character and frequency table into the header*/
-    fwrite(&nodeCounter, sizeof(int),1,fp2);/*storing the number of nodes into the header*/
+    fwrite(&totalBits,sizeof(int),1,fp2);
+    /*storing the number of bits into the header*/
+    fwrite(&counter, sizeof(int),1,fp2);
+    /*storing the size of the character and frequency table into the header*/
+    fwrite(&nodeCounter, sizeof(int),1,fp2);
+    /*storing the number of nodes into the header*/
     for(i = 0; i < MAX_TABLE; i++){
         if(frequency[i]> 0){
             fwrite(&character[i],sizeof(char),1,fp2);
@@ -245,13 +254,16 @@ void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree,c
             if(huffmanTable[i] == c){
                     for(f = 0;f < strlen(huffmanTableB[i]);f++){
                         if(huffmanTableB[i][f] == '1'){
-                            bit_buffer |= 1 << currentBit;/*setting a bit of a byte */
+                            bit_buffer |= 1 << currentBit;
+                            /*setting a bit of a byte */
                         }else if(huffmanTableB[i][f] == '0'){
-                            bit_buffer &= ~(1 << currentBit);/*clearing a bit of a byte */
+                            bit_buffer &= ~(1 << currentBit);
+                            /*clearing a bit of a byte */
                         }
                         currentBit++;
                         if (currentBit == 8){
-                            fwrite (&bit_buffer, 1, 1, fp2);/*writing the byte*/
+                            fwrite (&bit_buffer, 1, 1, fp2);
+                            /*writing the byte*/
                             currentBit = 0;
                             bit_buffer = 0;
                         }
@@ -337,7 +349,8 @@ this function creates the huffmanTree
 INPUT:char filename[],char character[],int frequency[],int *counter
 OUTPUT:struct minHeap*
 */
-struct minHeap* huffmanTree(char filename[],char character[],int frequency[],int *counter){
+struct minHeap* huffmanTree(char filename[],char character[],int frequency[]
+,int *counter){
     struct minHeap* minPriorityQ;
     int i;
     getFrequency(character,frequency,filename);
@@ -381,7 +394,8 @@ void huffmanEncoding(){
     minPriorityQ = huffmanTree(filename, character , frequency, &counter2);
     int arr[MAX_TABLE],top = 0; 
     table(minPriorityQ->array[0],arr, top,huffmanTable,huffmanTableB,&counter);
-    encode(huffmanTable,huffmanTableB,minPriorityQ->array[0],filename,character,frequency,counter2);
+    encode(huffmanTable,huffmanTableB,minPriorityQ->array[0],
+    filename,character,frequency,counter2);
 }
 
 /*
