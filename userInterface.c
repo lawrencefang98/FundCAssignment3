@@ -67,6 +67,7 @@ int main(void){
         break; 
 
         case 5:
+        /* compress the file*/
         compression();
         break; 
 
