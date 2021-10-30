@@ -5,6 +5,7 @@
 #include "dataManipulation.h"
 #include "compression.h"
 #include "login.h"
+#include "filehanding.h"
 
 
 /**************** Function prototypes *******************/
@@ -52,26 +53,32 @@ int main(void){
 
             case 3:
             /* Save doctor to database*/
+                saveDoctors(clinicPtr);
             break; 
                 
             case 4:
             /* save patient */
+                savePatients(clinicPtr);
             break; 
                 
             case 5:
             /* save admin */
+                saveAdminstaff(clinicPtr);
             break; 
 
             case 6:
-            /* read from database*/
+            /* Save users*/
+                saveUsers(clinicPtr);
             break; 
                 
             case 7:
             /* delete from database*/
+                deletefile();
             break;
             
              case 8:
             /* merge */
+                mergefile();
             break;
 
             case 9:
@@ -90,6 +97,8 @@ int main(void){
 
             case 12:
                 check=1;
+            break;
+
             default:
                 printf("Invalid choice.");
             break;
@@ -105,12 +114,12 @@ void printMenu1(void){
     printf("\n\n"
          "1. For Doctor\n" 
          "2. For Admin\n"
-         "3. Save doctor to Database\n"
-         "4. Save patient to Database\n"
-         "5. Save admin to Database\n" 
-         "6. Read from Database\n"
-         "7. delete file\n"
-         "8. Merge file\n"
+         "3. Save Doctors to Database\n"
+         "4. Save Patients to Database\n"
+         "5. Save Admin Staff to Database\n" 
+         "6. Save Users to Database\n"
+         "7. Delete file\n"
+         "8. Merge files\n"
          "9. Compress the file\n"
          "10. Encrypt the file\n"
          "11. Decyrpt the file\n"
