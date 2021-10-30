@@ -1,11 +1,9 @@
-
-
 /******************************************************************************
  *                               HEADER GUARDS                                *
  ******************************************************************************/
 
-#ifndef TEST_ENCRYPTION_H
-#define TEST_ENCRYPTION_H
+#ifndef FUNDCASSIGNMENT3_ENCRYPTION_H
+#define FUNDCASSIGNMENT3_ENCRYPTION_H
 
 /******************************************************************************
  *                               HEADER FILES                                 *
@@ -28,7 +26,7 @@
  ******************************************************************************/
 
 /* Menus */
-_Noreturn void cipherMenu();
+void cipherMenu();
 void cipherChoice();
 void encryptMenu(char input_b[], char output_b[], char key[]);
 void decryptMenu(char input_b[], char output_b[], char key[]);
@@ -53,10 +51,6 @@ void cipherMenu()
 
     printf("\nEnter your choice: ");
     scanf("%d", &choice);
-
-    /*printf("\nWARNING | Using an invalid key will corrupt the file.\n");
-    printf("\nEnter your key: ");
-    scanf("%s", key);*/
 
     while(1)
     {
@@ -85,6 +79,17 @@ void cipherMenu()
             printf("\nEnter your choice: ");
             scanf("%d", &choice);
         }
+
+        else if(choice == 3)
+        {
+            return;
+        }
+
+        else
+        {
+            printf("\nPlease choose a valid option.\n");
+            scanf("%d", &choice);
+        }
     }
 }
 
@@ -96,6 +101,7 @@ void cipherChoice()
     printf("\nChoose from the following options:");
     printf("\n  1. Encrypt a file");
     printf("\n  2. Decrypt a file");
+    printf("\n  3. Exit the menu");
 }
 
 
@@ -222,4 +228,4 @@ void xorEncDec(char input_b[], char output_b[], char key[])
     }
 }
 
-#endif /* TEST_ENCRYPTION_H */
+#endif /* FUNDCASSIGNMENT3_ENCRYPTION_H */
