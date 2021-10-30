@@ -422,8 +422,8 @@ void huffmanDecoding(){
 this function prints the menu
 */
 void compressionMenu(){
-    printf("Enter 1 to encode a file\n");
-    printf("Enter 2 to decode a file \n");
+    printf("Enter 1 to compress a file\n");
+    printf("Enter 2 to decompress a file \n");
     printf("Enter 3 to exit the program\n");
 }
 
