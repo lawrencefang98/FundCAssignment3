@@ -327,7 +327,7 @@ int checkCharNum(const char username[])
 int checkChar(const char password[])
 {
     int i;
-
+    int containsChar = 0;
     /* String only contains alphanumeric characters */
     for(i = 0; i <= MAX_PASS_LEN + 1; i++)
     {
@@ -337,13 +337,12 @@ int checkChar(const char password[])
             (ch <= 'a' && ch >= 'z') ||
             (ch <= '0' && ch >= '9'))
         {
-            return 0;
+            containsChar = 1;
         }
 
-        else
-           return 1;
 
     }
+    return containsChar;
 
 }
 
