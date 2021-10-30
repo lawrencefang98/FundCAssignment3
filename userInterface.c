@@ -97,25 +97,24 @@ void printMenu1(void){
 void printdoctor(){
     printf("\n\n"
          "1. Add New Patient\n"
-         "2. Edit Existing Patient Details\n"
-         "3. Delete Patient\n"
-         "4. Display Patient Information\n"
-         "5. View All Patient Details\n"
-         "6. Search All Patient Details\n"
-         "7. Return to Main Menu");
+         "2. Display Patient Information\n"
+         "3. View All Patient Details\n"
+         "4. Return to Main Menu");
 }
 
 void printstaff(){
         printf("\n\n"
-         "1. Add New Patient\n"
-         "2. Edit Existing Patient Details\n"
-         "3. Delete Patient\n"
-         "4. Display Patient Information\n"
-         "5. View All Patient Details\n"
-         "6. Search All Patient Details\n"
-         "7. Add New Doctor\n"
-         "8. Edit existing doctor details\n"
-         "9. View all doctor details\n");
+         "1. Add New User\n"
+         "2. Edit User\n"
+         "3. Delete Last Created User\n"
+         "4. Display User Information\n"
+         "5. View All User Details\n"
+         "6. Add New Doctor\n"
+         "7. Add New Admin Staff\n"
+         "8. Edit Admin Staff Title\n"           
+         "9. View all doctor details\n";
+         "10. View all staff details\n";
+    
 }
 
 
