@@ -73,7 +73,8 @@ int main(void){
 
         case 6:
         /* Encrypt the file*/
-         break; 
+            loginMenu();
+            break; 
             
         case 7:
         /* decrypt the file*/
