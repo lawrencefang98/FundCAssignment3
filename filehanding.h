@@ -48,7 +48,7 @@ void saveAdminstaff(Clinic_t *clinic)
 		fprintf(file, "Job Title: %s,", staffToPrint.jobTitle);
 		fprintf(file, "Start Date: %i/%i/%i\n", staffToPrint.startDate.day, staffToPrint.startDate.month, staffToPrint.startDate.year);
     }
-	fclose(file);
+	fclose(file); /* close the file*/
 }
 
 /*******************************************************************************
@@ -79,7 +79,7 @@ void saveDoctors(Clinic_t *clinic) {
 		fprintf(file, "Doctor ID: %i,", doctorToPrint.doctorId);
 		fprintf(file, "Start Date: %i/%i/%i\n", doctorToPrint.startDate.day, doctorToPrint.startDate.month, doctorToPrint.startDate.year);
 	}
-	fclose(file);
+	fclose(file); /* close the file*/
 }
 
 
@@ -112,7 +112,7 @@ void savePatients(Clinic_t *clinic)
 		fprintf(file, "Primary Doctor ID: %i\n", patientToPrint.primaryDoctorID);
 		
 	}
-	fclose(file);
+	fclose(file); /* close the file*/
 }
 
 void saveUsers(Clinic_t *clinic)
@@ -139,7 +139,7 @@ void saveUsers(Clinic_t *clinic)
 		fprintf(file, "Address: %s,", userToPrint.address);
 		fprintf(file, "Gender: %s\n", userToPrint.gender);
 	}
-	fclose(file);
+	fclose(file); /* close the file*/
 }
 
 /*******************************************************************************
@@ -204,11 +204,12 @@ int mergefile()
 
    printf("Merged Adminstaff.txt, Patient.txt, Doctor.txt and Users.txt into Clinic.txt");
   
+ /* close the file*/
    fclose(fp1);
    fclose(fp2);
    fclose(fp3);
    fclose(fp4);
-   fclose(fp5);
+   fclose(fp5); 
    return 0;
 }
 
