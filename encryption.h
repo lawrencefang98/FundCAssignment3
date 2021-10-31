@@ -229,3 +229,4 @@ void xorEncDec(char input_b[], char output_b[], char key[])
 }
 
 #endif /* FUNDCASSIGNMENT3_ENCRYPTION_H */
+
