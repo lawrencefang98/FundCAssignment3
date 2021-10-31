@@ -178,7 +178,7 @@ void addUser(user_t accounts[], int* total_p)
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
         }
-        
+
         while(strlen(accounts[i].username) > ID_LEN)
         {
             printf("ERROR | Your ID must not exceed 8 chars.\n");
@@ -202,15 +202,6 @@ void addUser(user_t accounts[], int* total_p)
         printf("ADD USER | Enter your password: ");
         scanf("%c", &space); /* Reads all text (including spaces) */
         scanf("%[^\n]", accounts[i].password);
-
-        /* Debug: User will be prompted to enter pass with no special chars */
-        while(checkChar(accounts[i].password) == 0)
-        {
-            printf("\nERROR | Password can only = alphanumeric characters.\n");
-            printf("ADD USER | Enter your password: ");
-            scanf("%c", &space); /* Reads all text (including spaces) */
-            scanf("%[^\n]", accounts[i].password);
-        }
 
         /* Debug: User will be prompted to enter pass > or == min characters */
         while(strlen(accounts[i].password) < MIN_PASS_LEN)
@@ -438,12 +429,6 @@ void loginUser(int* total_p)
         if(checkNum(login.username) == 0)
         {
             printf("\nERROR | Your ID must only contain numeric characters.\n");
-        }
-
-        /* Debug: User will be prompted to enter password with alphanum only */
-        if(checkChar(login.password) == 0)
-        {
-            printf("\nERROR | Password can only include alphanumeric chars.\n");
         }
 
         /* Debug: User will be prompted to enter username */
