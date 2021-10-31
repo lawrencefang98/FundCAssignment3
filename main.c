@@ -29,11 +29,6 @@ int main(void){
     int choice1=0;
     char selection1[256];
 
-  /*  login function
-
-    loginmenu();*/
-
-/* need a return from login menu to write a if function to go to the next menu*/
     do{
         printMenu1();
         printf("Enter your choice>");
