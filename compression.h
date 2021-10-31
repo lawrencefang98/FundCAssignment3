@@ -275,6 +275,7 @@ void encode(char huffmanTable[], char huffmanTableB[][30],struct minNode* tree
             }
         }  
     }
+    /*writing the last byte if it doesn't reach 8 byte*/
     fwrite (&bit_buffer, 1, 1, fp2);
     fclose(fp);
     fclose(fp2);
@@ -299,13 +300,18 @@ void decode(char encodedFile[]){
     int i;
     int c;
     int h;
+    /*get the beginning of the file*/
     fseek(fp, 0, SEEK_SET);
+    /*get the length of the file from the header*/
     fread(&length,sizeof(int),1,fp);
+    /*get the tableSize from the header*/
     fread(&tableSize,sizeof(int),1,fp);
+    /*get the capacity from the header*/
     fread(&capacity,sizeof(int),1,fp);
     char character[tableSize];
     int frequency[tableSize];
     minPriorityQ = createMinHeap(capacity);
+    /*getting the character array from header*/
     for(i = 0; i < tableSize; i++){
         char f;
         fread(&f, sizeof(char),1,fp);
@@ -316,6 +322,7 @@ void decode(char encodedFile[]){
         fread(&f, sizeof(int),1,fp);
         frequency[i] = f;
     }
+    /*creating the huffman tree the exact same*/
     for(i = 0; i < tableSize; i++){
             insertInHeap(minPriorityQ,createNode(character[i],frequency[i]));
     }
@@ -324,15 +331,19 @@ void decode(char encodedFile[]){
     }
     struct minNode* root =minPriorityQ->array[0];
     struct minNode* currentNode = minPriorityQ->array[0];
+    /*traversing the huffman tree to determine character*/
     while(length != currentBit){
         c=fgetc(fp);
         for(h = 0; h< 8; h ++){
+	    /*if bit is 0 go to the left node*/	
             if(((c >> h) & 0x01) == 0){
                 currentNode = currentNode->left;
             }
+	    /*if bit is 1 go to the left node*/	
             else{
                 currentNode = currentNode->right;
             }
+	    /*if current node is leaf get the character and restart*/	
             if(isLeaf(currentNode) == 1){
                 fwrite(&currentNode->symbol, sizeof(char),1,fp2);
                 currentNode= root;
@@ -357,6 +368,7 @@ struct minHeap* huffmanTree(char filename[],char character[],int frequency[]
 ,int *counter){
     struct minHeap* minPriorityQ;
     int i;
+    /*get size of min heap needed*/
     getFrequency(character,frequency,filename);
     for(i = 0; i < MAX_TABLE; i++){
         if(frequency[i]> 0){
@@ -364,11 +376,13 @@ struct minHeap* huffmanTree(char filename[],char character[],int frequency[]
         }
     }
     minPriorityQ = createMinHeap(*counter);
+    /*insert each node into minheap*/
     for(i = 0; i < MAX_TABLE; i++){
         if(frequency[i]> 0){
             insertInHeap(minPriorityQ,createNode(character[i],frequency[i]));
         }
     }
+    /*group the lowest nodes together to a parent node till there is a root*/
     while(isOneSize(minPriorityQ) == 0){
         extractMins(minPriorityQ);
     }
