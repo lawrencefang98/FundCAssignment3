@@ -178,16 +178,7 @@ void addUser(user_t accounts[], int* total_p)
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
         }
-
-        /* Debug: User will be prompted to enter user ID with no spaces */
-        while(strstr(accounts[i].username, " ") != NULL)
-        {
-            printf("ERROR | Your ID must not include spaces.\n");
-            printf("\nADD USER | Enter your employee ID: ");
-            scanf("%c", &space); /* Reads all text (including spaces) */
-            scanf("%[^\n]", accounts[i].username);
-        }
-
+        
         while(strlen(accounts[i].username) > ID_LEN)
         {
             printf("ERROR | Your ID must not exceed 8 chars.\n");
@@ -211,15 +202,6 @@ void addUser(user_t accounts[], int* total_p)
         printf("ADD USER | Enter your password: ");
         scanf("%c", &space); /* Reads all text (including spaces) */
         scanf("%[^\n]", accounts[i].password);
-
-        /* Debug: User will be prompted to enter password with no spaces */
-        while(strstr(accounts[i].password, " ") != NULL)
-        {
-            printf("\nERROR | Your password must not include spaces.\n");
-            printf("\nADD USER | Enter your password: ");
-            scanf("%c", &space); /* Reads all text (including spaces) */
-            scanf("%[^\n]", accounts[i].password);
-        }
 
         /* Debug: User will be prompted to enter pass with no special chars */
         while(checkChar(accounts[i].password) == 0)
@@ -299,16 +281,31 @@ void saveUser(user_t accounts[], int* total_p)
  * INPUT: username[]
  * OUTPUT: containsNum
  *****************************************************************************/
+/*int isNum(char ch);
+
+int isNum(char ch)
+{
+    if(ch >= '0' && ch <= '9')
+        return 1;
+
+    return 0;
+}*/
 
 int checkNum(const char username[])
 {
     int i;
-    int containsNum = 0;
+    int containsNum;
 
-    for(i = 0; i <= ID_LEN; i++)
+    for(i = 0; username[i] != '\0'; i++)
     {
         if(username[i] >= '0' && username[i] <= '9')
             containsNum = 1;
+
+        else
+        {
+            containsNum = 0;
+            break;
+        }
     }
 
     return containsNum;
@@ -325,7 +322,8 @@ int checkNum(const char username[])
 int checkChar(const char password[])
 {
     int i;
-    int containsChar = 0;
+    int containsChar;
+
     /* String only contains alphanumeric characters */
     for(i = 0; i <= MAX_PASS_LEN; i++)
     {
@@ -334,6 +332,12 @@ int checkChar(const char password[])
             (password[i] >= '0' && password[i] <= '9'))
         {
             containsChar = 1;
+        }
+
+        else
+        {
+            containsChar = 0;
+            break;
         }
     }
 
@@ -430,12 +434,6 @@ void loginUser(int* total_p)
             break;
         }
 
-        /* Debug: User will be prompted to enter password with no spaces */
-        if(strstr(login.password, " ") != NULL)
-        {
-            printf("\nERROR | Your password must not include spaces.\n");
-        }
-
         /* Debug: User will be prompted to enter username with numbers only */
         if(checkNum(login.username) == 0)
         {
@@ -446,12 +444,6 @@ void loginUser(int* total_p)
         if(checkChar(login.password) == 0)
         {
             printf("\nERROR | Password can only include alphanumeric chars.\n");
-        }
-
-        /* Debug: User will be prompted to enter username with no spaces */
-        if(strstr(login.username, " ") != NULL)
-        {
-            printf("\nERROR | Your ID must not include spaces.\n");
         }
 
         /* Debug: User will be prompted to enter username */
