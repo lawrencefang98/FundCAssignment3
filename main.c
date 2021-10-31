@@ -85,12 +85,8 @@ int main(void){
             /* Encrypt the file*/
                 loginMenu();
             break; 
-            
+         
             case 11:
-            /* decrypt the file*/
-            break; 
-
-            case 12:
                 check=1;
             break;
 
@@ -229,10 +225,12 @@ void for_staff(Clinic_t *clinicPtr){
             
             case 10:
                 displayAdminStaffList(clinicPtr);
-                break;           
+                break;   
+                
             case 11:
                 checks =1;
                 break;
+                
             default:
                 printf("Invalid choice.");
                 break;
