@@ -40,6 +40,14 @@ void writeFile(char filename[], char input_b[], char output_b[]);
  *                     FUNCTION PROTOTYPES  |  ENCRYPTION                     *
  ******************************************************************************/
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: cipherMenu()         PURPOSE: Display choices to user and accept
+ *                                         input to execute relevant function
+ * INPUT: N/A
+ * OUTPUT: N/A
+ *****************************************************************************/
+
 void cipherMenu()
 {
     char input_b[BUF_SIZE + 1] = {'\0'};
@@ -93,6 +101,13 @@ void cipherMenu()
     }
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: cipherChoice()         PURPOSE: Print choices to user
+ *
+ * INPUT: N/A
+ * OUTPUT: N/A
+ *****************************************************************************/
 
 void cipherChoice()
 {
@@ -104,6 +119,13 @@ void cipherChoice()
     printf("\n  3. Exit the menu");
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: encryptMenu()         PURPOSE: Carries out text encryption
+ *
+ * INPUT: input_b, output_b, key
+ * OUTPUT: N/A
+ *****************************************************************************/
 
 void encryptMenu(char input_b[], char output_b[], char key[])
 {
@@ -130,6 +152,14 @@ void encryptMenu(char input_b[], char output_b[], char key[])
     printf("\n\n\n            FILE ENCRYPTED SUCCESSFULLY           \n\n\n");
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: decryptMenu()         PURPOSE: Carries out text decryption
+ *
+ * INPUT: input_b, output_b, key
+ * OUTPUT: N/A
+ *****************************************************************************/
+
 void decryptMenu(char input_b[], char output_b[], char key[])
 {
     char in_file[MAX_FILE_NAME + 1] = {'\0'};
@@ -154,6 +184,13 @@ void decryptMenu(char input_b[], char output_b[], char key[])
     printf("\n\n\n            FILE DECRYPTED SUCCESSFULLY           \n\n\n");
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: readFile()         PURPOSE: Read file and store into text buffer
+ *
+ * INPUT: input_b, filename[]
+ * OUTPUT: input_b[]
+ *****************************************************************************/
 
 char readFile(char filename[], char input_b[])
 {
@@ -188,6 +225,14 @@ char readFile(char filename[], char input_b[])
     return input_b[BUF_SIZE];
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: writeFile()         PURPOSE: Write file from text buffer
+ *
+ * INPUT: input_b, filename[], output_b
+ * OUTPUT: N/A
+ *****************************************************************************/
+
 void writeFile(char filename[], char input_b[], char output_b[])
 {
     FILE * file_p = fopen(filename, "w");
@@ -215,6 +260,14 @@ void writeFile(char filename[], char input_b[], char output_b[])
     fclose(file_p);
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: xorEncDec()         PURPOSE: encrypt/decrypt chars from buffer
+ *
+ * INPUT: input_b, output_b, key
+ * OUTPUT: N/A
+ *****************************************************************************/
+
 void xorEncDec(char input_b[], char output_b[], char key[])
 {
     int i = 0;
@@ -223,6 +276,7 @@ void xorEncDec(char input_b[], char output_b[], char key[])
     {
         for (i = 0; i < strlen(input_b); i++)
         {
+            /* restrict the index of the key to its string length */
             output_b[i] = input_b[i] ^ key[i % sizeof(*key)/sizeof(char)];
         }
     }
