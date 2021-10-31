@@ -113,8 +113,7 @@ void printMenu1(void){
          "8. Merge files\n"
          "9. Compress the file\n"
          "10. Encrypt the file\n"
-         "11. Decyrpt the file\n"
-         "12. Exit the program\n");
+         "11. Exit the program\n");
 }
 
 void printdoctor(){
