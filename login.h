@@ -19,14 +19,13 @@
  ******************************************************************************/
 
 #define MAX_FILE_NAME 30
-#define MAX_FILE_SZ 1024
 #define LOGIN_DB "login_database.txt"
 
 #define MAX_PASS_LEN 20
 #define MIN_PASS_LEN 8
 
 #define ID_LEN 8
-#define MAX_CLINIC_SZ 50
+#define MAX_USERS 100
 #define BUF_SIZE 4096
 
 /******************************************************************************
@@ -73,7 +72,7 @@ int validCred(const char credentials[]);
 
 void loginMenu()
 {
-    user_t accounts[MAX_CLINIC_SZ + 1] = {0};
+    user_t accounts[MAX_USERS + 1] = {0};
 
     int choice = 0;
 
@@ -154,7 +153,7 @@ void addUser(user_t accounts[], int* total_p)
     printf("\n--------------------------------------------------");
 
     /* Total users must not exceed the maximum clinic size */
-    if(i <= MAX_CLINIC_SZ)
+    if(i <= MAX_USERS)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          *                           USER DATA: ID                           *
@@ -286,12 +285,11 @@ void saveUser(user_t accounts[], int* total_p)
     {
         int i = *total_p - 1;
 
-        /*while(i <= *total_p - 1)*/
-
         fprintf(file_p, "%s %s\n",
                 accounts[i].username,
                 accounts[i].password);
     }
+
     fclose(file_p);
 }
 
@@ -334,9 +332,9 @@ int validCred(const char credentials[])
 {
     FILE *file_p = fopen(LOGIN_DB, "r");
 
-    int i = 0; /* Counter variable for substring occurrences */
+    int exists = 0; /* Counter variable for substring occurrences */
 
-    char text_b[MAX_FILE_SZ + 1] = {'\0'}; /* Buffer for text file contents */
+    char text_b[BUF_SIZE + 1] = {'\0'}; /* Buffer for text file contents */
 
     if (file_p == NULL)
     {
@@ -346,20 +344,21 @@ int validCred(const char credentials[])
 
     else
     {
-        while(fgets(text_b, MAX_FILE_SZ, file_p) != NULL)
+        while(fgets(text_b, BUF_SIZE, file_p) != NULL)
         {
             char *ptr = text_b;
 
             while ((ptr = (strstr(ptr, credentials))) != NULL)
             {
-                i++;
+                exists++;
                 ++ptr;
             }
         }
     }
+
     fclose(file_p);
 
-    return i;
+    return exists;
 }
 
 
@@ -381,7 +380,7 @@ void loginUser(int* total_p)
 
     while(validCred(login.username) == 1 && validCred(login.password) == 1)
     {
-        printf("\n\n                LOGIN SUCCESSFUL                \n\n");
+        printf("\n\n                 LOGIN SUCCESSFUL                 \n\n");
 
         cipherMenu();
     }
@@ -409,7 +408,7 @@ void loginUser(int* total_p)
 
         if(checkNum(login.username) == 0)
         {
-            printf("\nERROR | Your ID must only = numeric characters.\n");
+            printf("\nERROR | Your ID must only contain numeric characters.\n");
         }
 
             /* Debug: User will be prompted to enter username with no spaces */
@@ -425,7 +424,7 @@ void loginUser(int* total_p)
 
         if(strlen(login.username) < ID_LEN)
         {
-            printf("\nERROR | User ID must not be < 8 characters.\n");
+            printf("\nERROR | User ID must not be less than 8 characters.\n");
         }
 
         if(strlen(login.username) > ID_LEN)
