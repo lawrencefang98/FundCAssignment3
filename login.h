@@ -50,7 +50,7 @@ void loginUser(int* total_p);
 void addUser(user_t accounts[], int* total_p);
 void saveUser(user_t accounts[], int* total_p);
 
-/* Validity Check */
+/* Debug Check */
 int checkChar(const char password[]);
 int checkNum(const char username[]);
 
@@ -133,10 +133,10 @@ void printMenu()
 
 /******************************************************************************
  * AUTHOR: Mandana Ebrahimian
- * FUNCTION: printMenu()          PURPOSE:  Prints the login menu
+ * FUNCTION: addUser()         PURPOSE: Collect username and password
  *
- * INPUT: N/A
- * OUTPUT: N/A
+ * INPUT: accounts[], total_p
+ * OUTPUT: saves new user to file with saveUser()
  *****************************************************************************/
 
 void addUser(user_t accounts[], int* total_p)
@@ -177,7 +177,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("\nADD USER | Enter your employee ID: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
-            break;
         }
 
         /* Debug: User will be prompted to enter user ID with no spaces */
@@ -187,7 +186,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("\nADD USER | Enter your employee ID: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
-            break;
         }
 
         while(strlen(accounts[i].username) > ID_LEN)
@@ -196,7 +194,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("\nADD USER | Enter your employee ID: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
-            break;
         }
 
         while(strlen(accounts[i].username) < ID_LEN)
@@ -205,7 +202,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("\nADD USER | Enter your employee ID: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].username);
-            break;
         }
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -223,7 +219,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("\nADD USER | Enter your password: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].password);
-            break;
         }
 
         /* Debug: User will be prompted to enter pass with no special chars */
@@ -233,7 +228,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("ADD USER | Enter your password: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].password);
-            break;
         }
 
         /* Debug: User will be prompted to enter pass > or == min characters */
@@ -243,7 +237,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("ADD USER | Enter your password: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].password);
-            break;
         }
 
         /* Debug: User will be prompted to enter pass > max characters */
@@ -253,7 +246,6 @@ void addUser(user_t accounts[], int* total_p)
             printf("ADD USER | Enter your password: ");
             scanf("%c", &space); /* Reads all text (including spaces) */
             scanf("%[^\n]", accounts[i].password);
-            break;
         }
     }
 
@@ -276,6 +268,13 @@ void addUser(user_t accounts[], int* total_p)
     }
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: saveUser()         PURPOSE: Save user input to account database
+ *
+ * INPUT: accounts[], total_p
+ * OUTPUT: saves new user to file with saveUser()
+ *****************************************************************************/
 
 void saveUser(user_t accounts[], int* total_p)
 {
@@ -293,6 +292,13 @@ void saveUser(user_t accounts[], int* total_p)
     fclose(file_p);
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: checkNum()         PURPOSE: Verify if ID only contains numbers
+ *
+ * INPUT: username[]
+ * OUTPUT: containsNum
+ *****************************************************************************/
 
 int checkNum(const char username[])
 {
@@ -308,6 +314,13 @@ int checkNum(const char username[])
     return containsNum;
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: checkChar()      PURPOSE: Verify if pass only contains alphanum
+ *
+ * INPUT: password[]
+ * OUTPUT: containsChar
+ *****************************************************************************/
 
 int checkChar(const char password[])
 {
@@ -327,6 +340,13 @@ int checkChar(const char password[])
     return containsChar;
 }
 
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: validCred()         PURPOSE: Validate user login input with
+ *                                         existing credentials
+ * INPUT: credentials[]
+ * OUTPUT: exists
+ *****************************************************************************/
 
 int validCred(const char credentials[])
 {
@@ -346,8 +366,11 @@ int validCred(const char credentials[])
     {
         while(fgets(text_b, BUF_SIZE, file_p) != NULL)
         {
+            /* text buffer passed to pointer */
             char *ptr = text_b;
 
+            /* strstr determines if user/pass exists in file */
+            /* exists updated with total occurrences of credentials in file */
             while ((ptr = (strstr(ptr, credentials))) != NULL)
             {
                 exists++;
@@ -361,14 +384,18 @@ int validCred(const char credentials[])
     return exists;
 }
 
-
+/******************************************************************************
+ * AUTHOR: Mandana Ebrahimian
+ * FUNCTION: loginUser()         PURPOSE: Authorise the user to access
+ *                                        cipher menu
+ * INPUT: total_p
+ * OUTPUT: N/A
+ *****************************************************************************/
 
 void loginUser(int* total_p)
 {
-    char space;
-
-    /* Struct 'login' used for login input */
-    user_t login;
+    char space; /* extra char for space */
+    user_t login; /* Struct 'login' used for login input */
 
     printf("\nLOGIN | User ID: ");
     scanf("%c", &space); /* Reads all text (including spaces) in a line */
@@ -378,6 +405,7 @@ void loginUser(int* total_p)
     scanf("%c", &space); /* Reads all text (including spaces) in a line */
     scanf("%[^\n]", login.password);
 
+    /* Login input matches existing credentials */
     while(validCred(login.username) == 1 && validCred(login.password) == 1)
     {
         printf("\n\n                 LOGIN SUCCESSFUL                 \n\n");
@@ -385,6 +413,7 @@ void loginUser(int* total_p)
         cipherMenu();
     }
 
+    /* No accounts exist in the database */
     if(total_p == 0)
     {
         printf("\nERROR | No accounts exist.\n");
@@ -393,6 +422,7 @@ void loginUser(int* total_p)
 
     else
     {
+        /* Username does not exist in the file */
         while(validCred(login.username) == 0 ||
               validCred(login.password) == 0)
         {
@@ -406,42 +436,55 @@ void loginUser(int* total_p)
             printf("\nERROR | Your password must not include spaces.\n");
         }
 
+        /* Debug: User will be prompted to enter username with numbers only */
         if(checkNum(login.username) == 0)
         {
             printf("\nERROR | Your ID must only contain numeric characters.\n");
         }
 
-            /* Debug: User will be prompted to enter username with no spaces */
+        /* Debug: User will be prompted to enter password with alphanum only */
+        if(checkChar(login.password) == 0)
+        {
+            printf("\nERROR | Password can only include alphanumeric chars.\n");
+        }
+
+        /* Debug: User will be prompted to enter username with no spaces */
         if(strstr(login.username, " ") != NULL)
         {
             printf("\nERROR | Your ID must not include spaces.\n");
         }
 
+        /* Debug: User will be prompted to enter username */
         if(strcmp(login.username, "\0") == 0)
         {
             printf("\nERROR | Empty user ID.\n");
         }
 
-        if(strlen(login.username) < ID_LEN)
-        {
-            printf("\nERROR | User ID must not be less than 8 characters.\n");
-        }
-
-        if(strlen(login.username) > ID_LEN)
-        {
-            printf("\nERROR | User ID must not exceed 8 characters.\n");
-        }
-
+        /* Debug: User will be prompted to enter password */
         if(strcmp(login.password, "\0") == 0)
         {
             printf("\nERROR | Empty password.\n");
         }
 
+        /* Debug: User will be prompted to enter ID not < than 8 characters */
+        if(strlen(login.username) < ID_LEN)
+        {
+            printf("\nERROR | User ID must not be less than 8 characters.\n");
+        }
+
+        /* Debug: User will be prompted to enter ID not > than 8 characters */
+        if(strlen(login.username) > ID_LEN)
+        {
+            printf("\nERROR | User ID must not exceed 8 characters.\n");
+        }
+
+        /* Debug: User will be prompted to enter pass not < than 8 characters */
         if(strlen(login.password) < MIN_PASS_LEN)
         {
             printf("\nERROR | Password must be at least 8 characters\n");
         }
 
+        /* Debug: User will be prompted to enter pass not > than 20 chars */
         if(strlen(login.password) > MAX_PASS_LEN)
         {
             printf("\nERROR | Password must not exceed 20 chars.\n");
